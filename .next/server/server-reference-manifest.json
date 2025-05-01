@@ -1,0 +1,14 @@
+{
+  "node": {
+    "521ce4d101ad878782ae0235edbe29c468a54cc6": {
+      "workers": {
+        "app/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Fbenjichukwudile%2FNextjs%2Fmceastcourt%2Fsrc%2Fapp%2Factions%2Factions.tsx%22%2C%5B%22getBlobToken%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/page": "action-browser"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "MqhL8fjzAYVfSfVuP5InWkzlyGuHNMcncKcZQnNrBZM="
+}
