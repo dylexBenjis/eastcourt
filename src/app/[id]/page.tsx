@@ -252,24 +252,25 @@ export default async function PropertyDetailsPage({
                 <TabsContent value="location" className="pt-6">
                   <h3 className="text-lg font-semibold mb-4">Location & Nearby</h3>
                   <div className="aspect-video bg-muted rounded-lg mb-6 overflow-hidden">
-                    <Image
-                      src="/placeholder.svg?height=400&width=800&text=Map"
-                      alt="Property location map"
-                      width={800}
-                      height={400}
-                      className="w-full h-full object-cover"
-                    />
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    style={{border: 0}}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={`https://www.google.com/maps?q=${property.address}&output=embed`}>
+                  </iframe>
                   </div>
-                  <h4 className="font-medium mb-3">Nearby Amenities</h4>
+                  <h4 className="font-medium mb-3">Address</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center">
-                      <School className="h-5 w-5 mr-3 text-muted-foreground" />
+                      <MapPin className="h-5 w-5 mr-3 text-muted-foreground" />
                       <div>
-                        <p className="font-medium">Malibu High School</p>
-                        <p className="text-sm text-muted-foreground">0.8 miles</p>
+                        <p className="text-sm text-muted-foreground">{property.address}</p>
                       </div>
                     </div>
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       <ShoppingBag className="h-5 w-5 mr-3 text-muted-foreground" />
                       <div>
                         <p className="font-medium">Malibu Country Mart</p>
@@ -289,7 +290,7 @@ export default async function PropertyDetailsPage({
                         <p className="font-medium">Malibu Beach</p>
                         <p className="text-sm text-muted-foreground">0.3 miles</p>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </TabsContent>
               </Tabs>

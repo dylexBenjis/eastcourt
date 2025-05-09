@@ -86,11 +86,10 @@ export function PostProperty() {
       price: parseInt(price),
       propertyType,
       label: listingType === "sale" ? "FOR_SALE" : "FOR_RENT",
-      location: `${address}, ${city}, ${state}, ${zip}, ${country}`,
+      address: `${address}, ${city}, ${state}, ${zip}, ${country}`,
+      // location:`${city}, ${state}, ${zip}, ${country}`,
       parking: parking,
       userId: user?.uid, // Replace with actual user ID
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       bedrooms: bedrooms,
       bathrooms: bathrooms,
       areaSqFt: sqft,

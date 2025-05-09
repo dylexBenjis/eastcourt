@@ -15,17 +15,16 @@ export const Property_schema =z.object( {
     price    :       z.number().optional(), // e.g. 1000000
     propertyType:    z.string().optional(),  // e.g. "apartment", "house", "land"
     label    :        z.string().optional(), // Enum for property label
-    location :        z.string().optional(),
-    locationLat: z.string().optional(),
-    locationLon : z.string().optional(),
+    address:       z.string().optional(), // Address of the property
+    // location :        z.string().optional(), // Array of strings for location
     parking:        z.string().optional(), // Optional field
     bedrooms   :     z.string().optional(), // Optional field
     bathrooms  :    z.string().optional(), // Optional field
     areaSqFt   :   z.string().optional(), // Optional field
     images     :   z.array(z.string()).optional(), // URLs of uploaded images
     userId    :       z.string().optional(), // @relation(fields: [userId], references: [id])
-    // createdAt       :z.string().optional(),// @default(now())
-    // updatedAt       :z.string().optional(),// @updatedAt
+    createdAt       :z.string().optional(),// @default(now())
+    updatedAt       :z.string().optional(),// @updatedAt
   });
 
 export type Property = z.infer<typeof Property_schema>; // This will infer the TypeScript type from the Zod schema
@@ -47,6 +46,14 @@ export async function Create_new_property(req:Property) {
         // Here you would typically save the property to a database
         console.log('saving to db', property);
 
+        //get lat and lon before saving to db
+        // const axios = require('axios').default;
+        // const location = property.location;
+        // const locationResponse = await axios.get(`https://us1.locationiq.com/v1/search?key=pk.5b2b044697e1f607aaa7303dde49e1e7&q=${location}&format=json&`).then((response: any) => {return response.data[0]});
+        // const lat = locationResponse.lat;
+        // const long = locationResponse.lon;
+        // console.log('lat', lat, 'long', long, 'locationResponse', locationResponse);
+
         const propertyReference = await addDoc(collection(firestoreDb, "properties"), {
                 title: property.title,
                 description: property.description,
@@ -54,7 +61,7 @@ export async function Create_new_property(req:Property) {
                 propertyType: property.propertyType,
                 label: property.label,
                 parking: property.parking,
-                location: property.location,
+                address: property.address,
                 bedrooms: property.bedrooms,
                 bathrooms: property.bathrooms,
                 areaSqFt: property.areaSqFt,
