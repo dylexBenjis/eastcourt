@@ -154,18 +154,19 @@ useEffect(() => {
 
 
   return (
-    <div className="container px-4 py-6 md:px-6 md:py-8">
+    <div className=" md:py-8">
 
-{!user&&<section className="h-[calc(100vh/1.75)] flex justify-center items-center">
-  <div className='flex flex-col gap-5 max-w-[768px] text-center '>
-  <h1  className="text-5xl font-bold">Welcome to Eastcourt, a website where you can list and find a property suited for you.</h1>
-  <p className="text-lg"><span  onClick={()=>{if(setActiveTab)setActiveTab('signin')}} className="cursor-pointer text-blue-600">Sign in</span> to list properties or start viewing properties close to you.</p>
+{!user&&<div className="relative h-[calc(100vh/1.75)] bg-[url(/p3.webp)] bg-center bg-no-repeat bg-cover w-screen flex justify-center items-center">
+<div className='absolute inset-0 bg-black bg-opacity-40'></div>
+  <div className='relative z-10 flex flex-col gap-5 max-w-[768px] text-center text-white'>
+  <h1  className="text-5xl font-bold">Welcome to Eastcourt,<br/> where you can submit and find a property suited for you.</h1>
+  <p className="text-lg "><span  onClick={()=>{if(setActiveTab)setActiveTab('post')}} className="cursor-pointer text-blue-500 hover:text-blue-700">Click here</span> to submit properties or scroll down to start viewing properties close to you.</p>
 </div>
-</section>}
+</div>}
 
 {/*browse properties */}
-
-<Browse_Properties/>
+{/* 
+<Browse_Properties/> */}
 
       {/* Featured Listings */}
       {/* <section className="mb-10 mt-10">
@@ -183,9 +184,11 @@ useEffect(() => {
         </div>
       </section> */}
 
-      {/* Recent Listings */}
-      <section>
-        <h2 className="mb-6 text-2xl font-bold">Recent Listings</h2>
+
+  <div className='flex justify-center py-10'>
+         {/* Recent Listings */}
+      <section className='lg:w-[1200px] max-w-[1200px] container'>
+        <h2 className="mb-6 text-2xl font-bold">Recently Listed Properties</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           
           {recent_listing.map((listing, index) => (
@@ -198,7 +201,8 @@ useEffect(() => {
         <div className="mt-6 flex justify-center">
           {hasMore&&<Button variant="outline" onClick={()=>{Get_recent_listings()}}>View All Properties</Button>}
         </div>
-      </section>
+      </section></div>
+
     </div>
   )
 }

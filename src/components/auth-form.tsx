@@ -21,6 +21,7 @@ export function AuthForm({ type }: AuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { setActiveTab, showSuccess, setShowSuccess } = useContext(ActiveTab_Context)
+  
 
   async function handleGoogleSignIn() {
     setIsLoading(true)

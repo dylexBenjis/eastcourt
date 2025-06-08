@@ -24,12 +24,10 @@ export default function RootLayout({
 
         <ThemeModeProvider >
           <ActiveTab_Provider>
-            <AuthState_Provider>
               <Toaster/>
               <NavBar/>
               {children}
               <Footer/>
-            </AuthState_Provider>
         </ActiveTab_Provider>
       </ThemeModeProvider>
       </body>

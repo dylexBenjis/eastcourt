@@ -17,7 +17,7 @@ import { AuthState_Context } from "../lib/auth_state"
 import Link from "next/link"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu"
 import { useTheme } from "next-themes"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 
 const NavBar=()=>{
@@ -31,13 +31,14 @@ const NavBar=()=>{
 
     //router useRouter();
     const router = useRouter();
+    const pathname= usePathname();
 
 return(
     <div className="sticky top-0 flex justify-center w-screen bg-background z-50">
         <div className="container lg:max-w-[1200px]">
     <header className=" z-50 border-b bg-background">
     <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 md:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="md:hidden">
@@ -50,9 +51,9 @@ return(
               {[
                 { name: "Home", icon: <Home className="mr-2 h-4 w-4" />, tab: "home" },
                 { name: "Browse Listings", icon: <Search className="mr-2 h-4 w-4" />, tab: "browse" },
-                { name: "My Listings", icon: <User className="mr-2 h-4 w-4" />, tab: "mylistings" },
+                // { name: "My Listings", icon: <User className="mr-2 h-4 w-4" />, tab: "mylistings" },
                 { name: "Post Property", icon: <Plus className="mr-2 h-4 w-4" />, tab: "post" },
-                { name: "Messages", icon: <Mail className="mr-2 h-4 w-4" />, tab: "messages" },
+                // { name: "Messages", icon: <Mail className="mr-2 h-4 w-4" />, tab: "messages" },
               ].map((item) => (
                 <Button
                   key={item.name}
@@ -71,21 +72,22 @@ return(
             </nav>
           </SheetContent>
         </Sheet>
-        <Button
+
+      </div>
+      <Button
             variant='ghost'
             onClick={() => {
               router.push(`/`);
               if(setActiveTab){ setActiveTab('home')}}}
           >
             <Home className="h-5 w-5" />
-            <span className="hidden md:inline-block">RealEstate Hub</span>
+            <span className=" inline-block">Eastcourt</span>
           </Button>
-      </div>
-      <nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
+      {(!(pathname==='/eastcourt_admin'))&&<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
         {[
           { name: "Home", tab: "home" },
           { name: "Browse Listings", tab: "browse" },
-          { name: "My Listings", tab: "mylistings" },
+          // { name: "My Listings", tab: "mylistings" },
           { name: "Post Property", tab: "post" },
           // { name: "Messages", tab: "messages" },
         ].map((item) => (
@@ -99,7 +101,7 @@ return(
             {item.name}
           </Button>
         ))}
-      </nav>
+      </nav>}
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
@@ -113,7 +115,7 @@ return(
         {/* <Button className="flex justify-center items-center" variant="ghost" size="icon" aria-label="Notifications">
           <Bell className="h-5 w-5" />
         </Button>  */}
-        <DropdownMenu>
+        {/* <DropdownMenu>
       <DropdownMenuTrigger asChild >
         <Button variant="outline" size="icon" className="flex justify-center items-center rounded-full" aria-label="Profile">
           {user?.photoURL?<div className="flex relative h-[100%] w-[100%]" ><Image src={user.photoURL} alt='user_profile picture' fill className="rounded-full"/></div>:<User className="h-5 w-5" />}
@@ -127,9 +129,9 @@ return(
         <DropdownMenuItem asChild>
           <Link href="/about">Location</Link>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem asChild>
+         <DropdownMenuItem asChild>
           <Link href="/publications">Publications</Link>
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
         <DropdownMenuItem asChild className='cursor-pointer'>
           {user?<span onClick={()=>{
             signOut(auth).then(() => {
@@ -142,7 +144,7 @@ return(
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-        
+         */}
 
       </div>
     </div>

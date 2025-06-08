@@ -3,7 +3,7 @@
 import React, { useEffect } from "react"
 import {put} from '@vercel/blob'
 import { useContext, useState } from "react"
-import { Upload } from "lucide-react"
+import { Building2, ChevronsUpDown, Upload, UserCheck } from "lucide-react"
 
 import { Button } from "@/src/components/ui/button"
 import { Card, CardContent } from "@/src/components/ui/card"
@@ -16,6 +16,8 @@ import { Create_new_property } from "../lib/upload-properties"
 import { AuthState_Context } from "../lib/auth_state"
 import { Update_user_properties } from "../lib/user"
 import { getBlobToken } from "./actions/actions"
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover"
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "../components/ui/command"
 
 export function PostProperty() {
 
@@ -118,8 +120,90 @@ export function PostProperty() {
   }
 
 
+  //select role
+
+  const roles =[{
+    value:'landlord',
+    label:'Landlord',
+    icon: Building2,
+    description:'Property owner'
+  },
+  {
+    value:'agent',
+    label:'Agent',
+    icon: UserCheck,
+    description:''
+  }]
+
+const [modalOpen, setModalOpen] = useState<boolean>(true);
+useEffect(()=>{
+  if(modalOpen){
+    document.body.classList.add('overflow-hidden');
+  }
+  else{
+    document.body.classList.remove('overflow-hidden')
+  }
+},[modalOpen]);
+
+const [selectedRole, setSelectedRole] = useState<string>('');
+const selectedRoleData = roles.find((role)=>{
+  role.value === selectedRole
+})
+
+const [open, setOpen] = useState<boolean>(false)
+
   return (
-    <div className="container px-4 py-6 md:px-6 md:py-8">
+    <div className="relative container px-4 py-6 md:px-6 md:py-8 ">
+      
+    
+      {modalOpen&&
+      <div className='fixed inset-0 flex justify-center items-center h-screen z-999 bg-black/80 '>
+        <div className='flex justify-center flex-col h-auto p-5 border-2 rounded-sm border-gray-500 bg-[background]'>
+          <div className='flex text-center flex-col'>
+            <h2 className="font-bold text-xl">Select Role</h2>
+            <p>Choose how you will like to continue</p>
+          </div>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button variant='outline' role='combobox' className='w-full justify-between h-12'>
+                {selectedRoleData?(
+                  <div className='flex items-center gap-2'>
+                  <selectedRoleData.icon className='h-4 w-4'/>
+                  <span>{selectedRoleData.label}</span>
+                  </div>
+                ):(
+                  'select role'
+                )}
+                <ChevronsUpDown className= 'ml-2 h-4 w-4 shrink-0 opacity-50'/>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <Command>
+                <CommandList>
+                  <CommandEmpty>no role</CommandEmpty>
+                  <CommandGroup>
+                    {
+                      roles.map((role)=> {
+                        return (<CommandItem 
+                           key={role.value} 
+                          value={role.value} 
+                          onSelect={(currentValue)=>{
+                            setSelectedRole(currentValue===selectedRole?'':currentValue); setOpen(false)
+                          }}>
+                            <role.icon className='w-5 h-5'/>                        
+                            <span>{role.label}</span>
+
+                        </CommandItem>)
+                      })
+                    }
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      }
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Post a Property</h1>
         <p className="text-muted-foreground">Fill in the details to list your property</p>

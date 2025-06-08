@@ -37,14 +37,14 @@ export default function Dashboard() {
 
 
         {/* Main Content */}
-        <main className="flex-1 container w-full lg:w-[1200px] max-w-[1200px]">
+        <main className="flex-1 w-full">
           {activeTab === "home" && <HomePage />}
+          <div className=' lg:w-[1200px] max-w-[1200px] container'>
           {activeTab === "mylistings" && <MyListings />}
           {activeTab === "post" && <PostProperty />}
-          {activeTab === "messages" && <Messages />}
           {activeTab === "signin" && <LoginPage />}
           {activeTab === "browse" && <Browse_Properties />}
-          {activeTab === "property_details_page" && <PropertyDetailsPage/>}
+          {activeTab === "property_details_page" && <PropertyDetailsPage/>}</div>
 
 
         </main>
