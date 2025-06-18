@@ -143,6 +143,8 @@ useEffect(()=>{
   else{
     document.body.classList.remove('overflow-hidden')
   }
+
+  console.log(selectedRole)
 },[modalOpen]);
 
 const [selectedRole, setSelectedRole] = useState<string>('');
@@ -155,7 +157,7 @@ const [open, setOpen] = useState<boolean>(false)
   return (
     <div className="relative container px-4 py-6 md:px-6 md:py-8 ">
       
-    
+    {/*choose role ui*/}
       {modalOpen&&
       <div className='fixed inset-0 flex justify-center items-center h-screen z-999 bg-black/80 '>
         <div className='flex justify-center flex-col h-auto p-5 border-2 rounded-sm border-gray-500 bg-[background]'>
@@ -186,9 +188,9 @@ const [open, setOpen] = useState<boolean>(false)
                       roles.map((role)=> {
                         return (<CommandItem 
                            key={role.value} 
-                          value={role.value} 
-                          onSelect={(currentValue)=>{
-                            setSelectedRole(currentValue===selectedRole?'':currentValue); setOpen(false)
+                          value={role.label} 
+                          onSelect={(currentValue: React.SetStateAction<string>)=>{
+                            setSelectedRole(currentValue===selectedRole?'':currentValue); setOpen(false); setModalOpen(false)
                           }}>
                             <role.icon className='w-5 h-5'/>                        
                             <span>{role.label}</span>
@@ -204,6 +206,8 @@ const [open, setOpen] = useState<boolean>(false)
         </div>
       </div>
       }
+
+    {/*post property ui*/}
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Post a Property</h1>
         <p className="text-muted-foreground">Fill in the details to list your property</p>
@@ -215,6 +219,12 @@ const [open, setOpen] = useState<boolean>(false)
             {/* Basic Information */}
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Basic Information</h2>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Role</Label>
+                  <Input id="role" value={selectedRole} readOnly/>
+                </div>
+              </div>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
