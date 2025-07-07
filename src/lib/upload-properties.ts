@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { User_schema } from "./user";
-import { addDoc, collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { firestoreDb } from "@/src/lib/firebase";
 import { NextApiRequest } from "next";
 import { toast } from "@/src/hooks/use-toast";
@@ -22,13 +22,14 @@ export const Property_schema =z.object( {
     bathrooms  :    z.string().optional(), // Optional field
     areaSqFt   :   z.string().optional(), // Optional field
     images     :   z.array(z.string()).optional(), // URLs of uploaded images
-    userId    :       z.string().optional(), // @relation(fields: [userId], references: [id])
+    // userId    :       z.string().optional(), // @relation(fields: [userId], references: [id])
     createdAt       :z.string().optional(),// @default(now())
     updatedAt       :z.string().optional(),// @updatedAt
   });
 
 export type Property = z.infer<typeof Property_schema>; // This will infer the TypeScript type from the Zod schema
 
+export type Approved_property = z.infer<typeof Property_schema>; // This will infer the TypeScript type from the Zod schema and add userId
 
 export async function Create_new_property(req:Property) {
     try{ 
@@ -66,7 +67,7 @@ export async function Create_new_property(req:Property) {
                 bathrooms: property.bathrooms,
                 areaSqFt: property.areaSqFt,
                 images: property.images,
-                userId: property.userId,
+                // userId: property.userId,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
                 });
@@ -87,4 +88,43 @@ export async function Create_new_property(req:Property) {
         console.error("Error creating new property:", error);
     }
 
+}
+
+//approve property
+export async function Approve_property(propertyId: string) {
+    try {
+        // Get the property document reference
+        const propertyRef = doc(firestoreDb, "properties", propertyId);
+        
+        // Get the property document
+        const propertyDoc = await getDoc(propertyRef);
+        
+        if (!propertyDoc.exists()) {
+            throw new Error("Property not found");
+        }
+        
+        // Get the property data
+        const propertyData = propertyDoc.data() as Property;
+        
+        // Create a new approved property object
+        const approvedProperty: Approved_property = {
+            ...propertyData,
+            // userId: userId, // Add the userId that approved to the approved property
+            id: propertyId, // Ensure the id is set
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+        
+        // Save the approved property to the database
+        await setDoc(doc(firestoreDb, "approved_properties", propertyId), approvedProperty);
+        
+        // Optionally, you can delete the original property document if needed
+        await deleteDoc(propertyRef);
+
+
+        
+        return approvedProperty;
+    } catch (error) {
+        console.error("Error approving property:", error);
+    }
 }

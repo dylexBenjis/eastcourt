@@ -30,6 +30,10 @@ export function PostProperty() {
   const [uploadedImages, setUploadedImages] = useState<string[]>([])  
   const [listingType, setListingType] = useState("sale")
 
+  //location type
+    const [locationType, setLocationType] = useState("coordinate")
+
+
   //user
   const {user, loading} = useContext(AuthState_Context);
 
@@ -38,13 +42,14 @@ export function PostProperty() {
     if (e.target.files) {
       const newImages = Array.from(e.target.files).map((file) => {return file})
       const imageUrls = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
+      const uuid = self.crypto.randomUUID()
         // .map((file) => URL.createObjectURL(file))
-      setImages([...images, ...imageUrls.map((url, index) => ({ name: `${user?.uid} ${newImages[index].name}`, imageUrls: url, file: newImages[index] }))])
+      setImages([...images, ...imageUrls.map((url, index) => ({ name: `${uuid}${newImages[index].name}`, imageUrls: url, file: newImages[index] }))])
       
     }
   }
   useEffect(()=>{
-      console.log("Images:", images)
+      console.log("Images:", images,)
     },) 
 
   // Handle form submission
@@ -59,9 +64,32 @@ export function PostProperty() {
     }else {
       try{      for(const image of images){
         const token = await getBlobToken();
-    const uploadedImages = await put(image.name, image.file, { access: 'public', token: token });
+
+        //upload image to vercel blob
+    if(image.file.type.startsWith('image/')) {
+      const uploadedImages = await put(image.name, image.file, { access: 'public', token: token });
       console.log("Uploaded Images:", uploadedImages)
-      newImageArray.push({filename: `${image.name}${uploadedImages.pathname}`, imageUrls: uploadedImages})
+      newImageArray.push({filename: `${image.name}${uploadedImages.pathname}`, imageUrls: uploadedImages.url})}
+
+      //upload video to cloudinary
+      
+    if(image.file.type.startsWith('video/')) {
+      const videoFormData = new FormData();
+      videoFormData.append("file", image.file)
+      videoFormData.append("upload_preset", "pnbiwcfw");
+      for (const [key, value] of videoFormData.entries()) {
+        console.log(`FormData entry: ${key}:`, value)
+      }
+      const res = await fetch(
+      'https://api.cloudinary.com/v1_1/dgfgdtgkt/video/upload',
+      {
+        method: 'POST',
+        body: videoFormData,
+      }
+    );
+    const uploadedImages = await res.json() 
+    console.log("Uploaded Images:", uploadedImages)
+      newImageArray.push({filename: `${image.name}${uploadedImages.url}`, imageUrls: uploadedImages.url})}
       console.log("newImageArray", newImageArray)
     }}catch(error){console.log("Error uploading image:", error)}}
     
@@ -77,25 +105,28 @@ export function PostProperty() {
     const sqft = (form.elements.namedItem("sqft") as HTMLInputElement).value;
     const parking = (form.elements.namedItem("parking") as HTMLInputElement).value;
     const address = (form.elements.namedItem("address") as HTMLInputElement).value;
-    const unit = (form.elements.namedItem("unit") as HTMLInputElement).value;
     const city = (form.elements.namedItem("city") as HTMLInputElement).value;
     const state = (form.elements.namedItem("state") as HTMLInputElement).value;
     const zip = (form.elements.namedItem("zip") as HTMLInputElement).value;
     const country = (form.elements.namedItem("country") as HTMLInputElement).value;
+    const long = (form.elements.namedItem("long") as HTMLInputElement).value;
+    const lat = (form.elements.namedItem("lat") as HTMLInputElement).value;
+
+
     const propertyData = {
       title,
       description,
       price: parseInt(price),
       propertyType,
       label: listingType === "sale" ? "FOR__SALE" : "FOR_RENT",
-      address: `${address}, ${city}, ${state}, ${zip}, ${country}`,
+    address: locationType==='address'?`${address}, ${city}, ${state}, ${zip}, ${country}`:`${lat},${long}`,
       // location:`${city}, ${state}, ${zip}, ${country}`,
       parking: parking,
-      userId: user?.uid, // Replace with actual user ID
+      // userId: user?.uid, // Replace with actual user ID
       bedrooms: bedrooms,
       bathrooms: bathrooms,
       areaSqFt: sqft,
-      images: newImageArray.map((image: { imageUrls: any }) => image.imageUrls.url), // Use the uploaded image URLs
+      images: newImageArray.map((image: { imageUrls: string }) => image.imageUrls), // Use the uploaded image URLs
     }
     
     console.log("Property Data:", propertyData)
@@ -154,14 +185,17 @@ const selectedRoleData = roles.find((role)=>{
 
 const [open, setOpen] = useState<boolean>(false)
 
+
+//
+
   return (
     <div className="relative container px-4 py-6 md:px-6 md:py-8 ">
       
     {/*choose role ui*/}
       {modalOpen&&
       <div className='fixed inset-0 flex justify-center items-center h-screen z-999 bg-black/80 '>
-        <div className='flex justify-center flex-col h-auto p-5 border-2 rounded-sm border-gray-500 bg-[background]'>
-          <div className='flex text-center flex-col'>
+        <div className='flex justify-center flex-col h-auto p-8 border-[1px] rounded-sm border-gray-500 bg-[background]'>
+          <div className='flex text-center flex-col gap-2'>
             <h2 className="font-bold text-xl">Select Role</h2>
             <p>Choose how you will like to continue</p>
           </div>
@@ -233,7 +267,7 @@ const [open, setOpen] = useState<boolean>(false)
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price ($)</Label>
+                  <Label htmlFor="price">Price (&#x20A6;)</Label>
                   <Input id="price" type="number" placeholder="e.g. 350000" />
                 </div>
               </div>
@@ -297,8 +331,6 @@ const [open, setOpen] = useState<boolean>(false)
                     <SelectContent>
                       <SelectItem value="house">House</SelectItem>
                       <SelectItem value="apartment">Apartment</SelectItem>
-                      <SelectItem value="condo">Condo</SelectItem>
-                      <SelectItem value="townhouse">Townhouse</SelectItem>
                       <SelectItem value="land">Land</SelectItem>
                       <SelectItem value="commercial">Commercial</SelectItem>
                     </SelectContent>
@@ -312,7 +344,6 @@ const [open, setOpen] = useState<boolean>(false)
                       <SelectValue placeholder="Select number" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="studio">Studio</SelectItem>
                       <SelectItem value="1">1</SelectItem>
                       <SelectItem value="2">2</SelectItem>
                       <SelectItem value="3">3</SelectItem>
@@ -330,12 +361,10 @@ const [open, setOpen] = useState<boolean>(false)
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="1">1</SelectItem>
-                      <SelectItem value="1.5">1.5</SelectItem>
                       <SelectItem value="2">2</SelectItem>
-                      <SelectItem value="2.5">2.5</SelectItem>
                       <SelectItem value="3">3</SelectItem>
-                      <SelectItem value="3.5">3.5</SelectItem>
-                      <SelectItem value="4">4+</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5">5+</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -354,7 +383,19 @@ const [open, setOpen] = useState<boolean>(false)
 
                 <div className="space-y-2">
                   <Label htmlFor="parking">Parking Spaces</Label>
-                  <Input id="parking" type="number" placeholder="e.g. 2" />
+                  <Select>
+                    <SelectTrigger id="parking">
+                      <SelectValue placeholder="Select number" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0">none</SelectItem>
+                      <SelectItem value="1">1</SelectItem>
+                      <SelectItem value="2">2</SelectItem>
+                      <SelectItem value="3">3</SelectItem>
+                      <SelectItem value="4">4</SelectItem>
+                      <SelectItem value="5">5+</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
@@ -363,16 +404,52 @@ const [open, setOpen] = useState<boolean>(false)
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Location</h2>
 
-              <div className="grid gap-4 md:grid-cols-2">
+                            <div className="space-y-2">
+                <Label>Choose coordinate for precise location on google map</Label>
+                <RadioGroup defaultValue="coordinate" className="flex gap-4" onValueChange={setLocationType}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="coordinate" id="coordinate" />
+                    <Label htmlFor="coordinate" className="cursor-pointer">
+                      Coordinate
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="address" id="address" />
+                    <Label htmlFor="address" className="cursor-pointer">
+                      Address
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {locationType==='coordinate'&&<div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="long">Longitude</Label>
+                  <Input id="longitude" placeholder="longitude" />
+                </div>
+
+                {/* <div className="space-y-2">
+                  <Label htmlFor="unit">Unit/Apt</Label>
+                  <Input id="unit" placeholder="Apartment or unit number" />
+                </div> */}
+
+                <div className="space-y-2">
+                  <Label htmlFor="lat">Latitude</Label>
+                  <Input id="latitude" placeholder="latitude" />
+                </div>
+
+              </div>}
+                
+              {locationType==='address'&&<div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
                   <Input id="address" placeholder="Street address" />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="unit">Unit/Apt # (Optional)</Label>
+                {/* <div className="space-y-2">
+                  <Label htmlFor="unit">Unit/Apt</Label>
                   <Input id="unit" placeholder="Apartment or unit number" />
-                </div>
+                </div> */}
 
                 <div className="space-y-2">
                   <Label htmlFor="city">City</Label>
@@ -391,18 +468,18 @@ const [open, setOpen] = useState<boolean>(false)
 
                 <div className="space-y-2">
                   <Label htmlFor="country">Country</Label>
-                  <Input id="country" placeholder="Country" defaultValue="United States" />
+                  <Input id="country" placeholder="Country" />
                 </div>
-              </div>
+              </div>}
             </div>
 
             {/* Images */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Images</h2>
+              <h2 className="text-xl font-semibold">Files</h2>
               <div className="grid gap-4">
                 <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
                   <Upload className="mb-4 h-10 w-10 text-muted-foreground" />
-                  <h3 className="mb-2 text-lg font-medium">Upload Property Images</h3>
+                  <h3 className="mb-2 text-lg font-medium">Upload Property Images/Videos</h3>
                   {/* <p className="mb-4 text-sm text-muted-foreground">
                     Drag and drop your images here or click to browse
                   </p> */}
@@ -411,24 +488,31 @@ const [open, setOpen] = useState<boolean>(false)
                     type="file"
                     ref={imageInputRef}
                     multiple
-                    accept="image/*"
+                    accept="image/*, video/*"
                     className="hidden"
                     onChange={handleImageUpload}
                   />
                     <Button variant='secondary' type='button' className="cursor-pointer" onClick={()=>{handleButtonClick()}}>
-                      Select Images
+                      Select files
                     </Button>
                 </div>
 
                 {images.length > 0 && (
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                     {images.map((image, index) => (
-                      <div key={index} className="relative aspect-square rounded-md bg-muted">
-                        <img
+                      <div key={index} className="relative aspect-square rounded-md">
+                        {image.file.type.startsWith('image/')&&<img
                           src={image.imageUrls || "/placeholder.svg"}
                           alt={`Property image ${index + 1}`}
                           className="h-full w-full rounded-md object-cover"
-                        />
+                        />}
+                        {image.file.type.startsWith('video/')&&(<video
+                          src={image.imageUrls}
+                          controls
+                          autoPlay
+                          className="h-full w-full rounded-md"
+                          muted
+                        />)}
                       </div>
                     ))}
                   </div>
@@ -438,10 +522,10 @@ const [open, setOpen] = useState<boolean>(false)
 
             {/* Submit */}
             <div className="flex justify-end gap-4">
-              <Button variant="outline" type="reset" onClick={() => {}}>
+              <Button variant="outline" type="reset" onClick={() => {window.scrollTo({top:0,behavior:'smooth'});setImages([]); setSelectedRole(''); setModalOpen(true)}}>
                 Reset
               </Button>
-              <Button type="submit">Publish Listing</Button>
+              <Button type="submit">Submit Listing</Button>
             </div>
           </form>
         </CardContent>

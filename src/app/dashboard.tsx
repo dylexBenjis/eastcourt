@@ -20,10 +20,14 @@ import { AuthState_Context } from "../lib/auth_state"
 import PropertyDetailsPage from "./property-details-page"
 
 
-export default function Dashboard() {
+export default function Dashboard(props: { activeTab: string }) {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
 
   const {activeTab, setActiveTab} = useContext(ActiveTab_Context);
+
+  if (props.activeTab && typeof setActiveTab === "function") {
+    setActiveTab(props.activeTab);
+  }
 
   //user
   const {user, loading} = useContext(AuthState_Context);

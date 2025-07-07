@@ -11,5 +11,5 @@ export default function Page() {
     return <div className="flex justify-center items-center w-screen h-screen"><div className="loader">loading....</div></div>
   }
 
-  return <div className=" flex justify-center w-screen"><div className=""><Dashboard /></div></div>
+  return <div className=" flex justify-center w-screen"><div className=""><Dashboard activeTab={"home"}/></div></div>
 }

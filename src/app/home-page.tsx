@@ -84,16 +84,17 @@ export function HomePage() {
 
   //fetch recent listings from the database
   const [recent_listing, setRecentListings] = useState<Property[]>([])
-  const [recent_listings_loading, setRecentListingsLoading] = useState(false)
+  const [recent_listings_loading, setRecentListingsLoading] = useState(true)
   const [lastVisible, setLastVisible] = useState<Property>({}); // To store the last fetched document
 const [docincrement, setDocIncrement] = useState(5); // Number of documents to fetch in each batch
 const [nextBatch, setNextBatch] = useState(false); // To track if it's the next batch
   const [hasMore, setHasMore] = useState(true); 
+  
 async function Get_recent_listings() {
     try {
       setRecentListingsLoading(true)
         const document_size = 10; // Number of documents to fetch
-        const listingsRef = collection(firestoreDb, "properties");
+        const listingsRef = collection(firestoreDb, "approved_properties");
         
         let q;   
         
@@ -190,12 +191,12 @@ useEffect(() => {
       <section className='lg:w-[1200px] max-w-[1200px] container'>
         <h2 className="mb-6 text-2xl font-bold">Recently Listed Properties</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          
-          {recent_listing.map((listing, index) => (
+          {(recent_listing.length === 0)?
+          (Array.from({length:5}).map((_, index)=>(<PropertyCardSkeleton key={index}/>))):(recent_listing.map((listing, index) => (
               <Fragment key={index}>
               <Property_card listing={listing}/>
               </Fragment>
-            ))}
+            )))}
             {recent_listings_loading && Array.from({ length: expectedListings }).map((_, index) => (<PropertyCardSkeleton key={index} />))}
         </div>
         <div className="mt-6 flex justify-center">

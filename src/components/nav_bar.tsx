@@ -83,7 +83,7 @@ return(
             <Home className="h-5 w-5" />
             <span className=" inline-block">Eastcourt</span>
           </Button>
-      {(!(pathname==='/eastcourt_admin'))&&<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
+      {(!(pathname==='/eastcourt_admin'))?<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
         {[
           { name: "Home", tab: "home" },
           { name: "Browse Listings", tab: "browse" },
@@ -97,6 +97,26 @@ return(
             onClick={() => {
               router.push(`/`);
               if(setActiveTab){ setActiveTab(item.tab)}}}
+          >
+            {item.name}
+          </Button>
+        ))}
+      </nav>:<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
+        {[
+          { name: "Home", tab: "home" },
+          { name: "Browse Listings", tab: "browse" },
+          { name: "Post Property", tab: "post" },          
+          { name: "My Listings", tab: "mylistings" },
+
+          // { name: "Messages", tab: "messages" },
+        ].map((item) => (
+          <Button
+            key={item.name}
+            variant={activeTab === item.tab ? "secondary" : "ghost"}
+            onClick={ () => {
+              if(setActiveTab){ setActiveTab(item.tab)}
+              router.push(`/`);
+              }}
           >
             {item.name}
           </Button>
