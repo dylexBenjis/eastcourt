@@ -78,8 +78,8 @@ export async function Create_new_property(req:Property) {
                   });
     
             toast({
-                title: "Property Created 🎉",
-                description: "Your property was created successfully.",
+                title: "Property Received 🎉",
+                description: "Your property was been received successfully.",
             })
         console.log('propertyReference', propertyReference);
         // Return the ID of the newly created property

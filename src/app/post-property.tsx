@@ -19,6 +19,8 @@ import { getBlobToken } from "./actions/actions"
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "../components/ui/command"
 
+import { toast } from "../hooks/use-toast"
+
 export function PostProperty() {
 
   type imageProps={
@@ -111,8 +113,8 @@ export function PostProperty() {
     const state = (form.elements.namedItem("state") as HTMLInputElement).value;
     const zip = (form.elements.namedItem("zip") as HTMLInputElement).value;
     const country = (form.elements.namedItem("country") as HTMLInputElement).value;
-    const long = (form.elements.namedItem("long") as HTMLInputElement).value;
-    const lat = (form.elements.namedItem("lat") as HTMLInputElement).value;
+    const long = (form.elements.namedItem("long") as HTMLInputElement)?.value;
+    const lat = (form.elements.namedItem("lat") as HTMLInputElement)?.value;
 
 
     const propertyData = {
@@ -133,14 +135,16 @@ export function PostProperty() {
     
     console.log("Property Data:", propertyData)
     // Here you would typically send the propertyData to your backend or API
-    try{const new_property = await Create_new_property({...propertyData})}
+    try{
+      const new_property = await Create_new_property({...propertyData});
+      setUploading(false);
+        //@ts-ignore
+      if (new_property) {
+      sessionStorage.removeItem('my-listings')
+    } }
     catch(error){console.log('error uploading to firebase')}
     console.log("Form submitted");
-    //@ts-ignore
-    if (new_property) await Update_user_properties(propertyData?.userId, new_property).then(()=>{
-      sessionStorage.removeItem('my-listings')
-    }) 
-    setUploading(false);
+
 
   }
 
