@@ -77,7 +77,6 @@ return(
       <Button
             variant='ghost'
             onClick={() => {
-              router.push(`/`);
               if(setActiveTab){ setActiveTab('home')}}}
           >
             <Home className="h-5 w-5" />

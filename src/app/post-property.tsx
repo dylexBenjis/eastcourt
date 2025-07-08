@@ -27,7 +27,7 @@ export function PostProperty() {
     name: string;
   }
   const [images, setImages] = useState<imageProps[]>([])
-  const [uploadedImages, setUploadedImages] = useState<string[]>([])  
+  const [uploading, setUploading] = useState<boolean>()  
   const [listingType, setListingType] = useState("sale")
 
   //location type
@@ -55,7 +55,9 @@ export function PostProperty() {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     
-    e.preventDefault()
+    e.preventDefault();
+
+    setUploading(true);
 
     var newImageArray:any=[]
     if(images.length === 0){
@@ -131,12 +133,14 @@ export function PostProperty() {
     
     console.log("Property Data:", propertyData)
     // Here you would typically send the propertyData to your backend or API
-    const new_property = await Create_new_property({...propertyData})
+    try{const new_property = await Create_new_property({...propertyData})}
+    catch(error){console.log('error uploading to firebase')}
     console.log("Form submitted");
     //@ts-ignore
     if (new_property) await Update_user_properties(propertyData?.userId, new_property).then(()=>{
       sessionStorage.removeItem('my-listings')
     }) 
+    setUploading(false);
 
   }
 
@@ -525,7 +529,7 @@ const [open, setOpen] = useState<boolean>(false)
               <Button variant="outline" type="reset" onClick={() => {window.scrollTo({top:0,behavior:'smooth'});setImages([]); setSelectedRole(''); setModalOpen(true)}}>
                 Reset
               </Button>
-              <Button type="submit">Submit Listing</Button>
+              <Button type="submit">{uploading?'Submitting':'Submit'} Listing</Button>
             </div>
           </form>
         </CardContent>

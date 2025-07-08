@@ -28,7 +28,7 @@ import { Key } from "react"
 
 //define dynamic paths
 export async function generateStaticParams() {
-    const snapshot = await getDocs(collection(firestoreDb, 'properties'));
+    const snapshot = await getDocs(collection(firestoreDb, 'approved_properties'));
     const paths = snapshot.docs.map((doc) => ({
       params: doc.id ,
     }))
@@ -51,7 +51,7 @@ export default async function PropertyDetailsPage({
     const { id } = await params
 
     // fetch data based on id
-    const docRef = doc(firestoreDb, "properties", id); 
+    const docRef = doc(firestoreDb, "approved_properties", id); 
     const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
         return <div>Property not found</div>
@@ -299,7 +299,7 @@ export default async function PropertyDetailsPage({
         </div>
 
         {/* Contact Agent Card */}
-        <div>
+        {/*<div>
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center gap-4 mb-6">
@@ -329,7 +329,7 @@ export default async function PropertyDetailsPage({
                 </Button>
                 <Button variant="outline" className="w-full">
                   Request More Info
-                </Button> */}
+                </Button> 
               </div>
               <Separator className="my-6" />
               {/* <div className="space-y-4">
@@ -358,10 +358,10 @@ export default async function PropertyDetailsPage({
                 <Button variant="link" className="w-full p-0">
                   Get Pre-Approved
                 </Button>
-              </div> */}
+              </div> 
             </CardContent>
           </Card>
-        </div>
+        </div>*/}
       </div>
 
       {/* Similar Properties */}
