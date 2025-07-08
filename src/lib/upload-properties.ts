@@ -16,7 +16,7 @@ export const Property_schema =z.object( {
     propertyType:    z.string().optional(),  // e.g. "apartment", "house", "land"
     label    :        z.string().optional(), // Enum for property label
     address:       z.string().optional(), // Address of the property
-    // location :        z.string().optional(), // Array of strings for location
+    role :        z.string().optional(), // strings for role of property poster
     parking:        z.string().optional(), // Optional field
     bedrooms   :     z.string().optional(), // Optional field
     bathrooms  :    z.string().optional(), // Optional field
@@ -67,6 +67,7 @@ export async function Create_new_property(req:Property) {
                 bathrooms: property.bathrooms,
                 areaSqFt: property.areaSqFt,
                 images: property.images,
+                role: property.role,
                 // userId: property.userId,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),

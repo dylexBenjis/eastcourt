@@ -115,11 +115,13 @@ export function PostProperty() {
     const country = (form.elements.namedItem("country") as HTMLInputElement).value;
     const long = (form.elements.namedItem("long") as HTMLInputElement)?.value;
     const lat = (form.elements.namedItem("lat") as HTMLInputElement)?.value;
+    const role = (form.elements.namedItem("role") as HTMLInputElement).value;
 
 
     const propertyData = {
       title,
       description,
+      role: role,
       price: parseInt(price),
       propertyType,
       label: listingType === "sale" ? "FOR__SALE" : "FOR_RENT",
