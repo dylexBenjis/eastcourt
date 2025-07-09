@@ -20,6 +20,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popove
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "../components/ui/command"
 
 import { toast } from "../hooks/use-toast"
+import { ActiveTab_Context } from "../components/activeTab-provider"
 
 export function PostProperty() {
 
@@ -41,16 +42,30 @@ export function PostProperty() {
 
   // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     if (e.target.files) {
       const newImages = Array.from(e.target.files).map((file) => {return file})
       const imageUrls = Array.from(e.target.files).map((file) => URL.createObjectURL(file))
       const uuid = self.crypto.randomUUID()
         // .map((file) => URL.createObjectURL(file))
       setImages([...images, ...imageUrls.map((url, index) => ({ name: `${uuid}${newImages[index].name}`, imageUrls: url, file: newImages[index] }))])
-      
-    }
+
+      console.log("Selected images:", newImages)
+    }     
+     e.target.value = ""; // Clear the input value to allow re-uploading the same file;
   }
   useEffect(()=>{
+    // Find the first image
+    const imageIndex = images.findIndex(image =>
+      image.file.type.startsWith("image/")
+    );
+
+    if (imageIndex > 0) {
+      // Swap the first file with the first image
+      const temp = images[0];
+      images[0] = images[imageIndex];
+      images[imageIndex] = temp;
+    }
       console.log("Images:", images,)
     },) 
 
@@ -73,7 +88,7 @@ export function PostProperty() {
     if(image.file.type.startsWith('image/')) {
       const uploadedImages = await put(image.name, image.file, { access: 'public', token: token });
       console.log("Uploaded Images:", uploadedImages)
-      newImageArray.push({filename: `${image.name}${uploadedImages.pathname}`, imageUrls: uploadedImages.url})}
+      newImageArray.push({filename: `${image.name}${uploadedImages.pathname}`, imageUrls: uploadedImages.url, type: 'image'})}
 
       //upload video to cloudinary
       
@@ -93,26 +108,26 @@ export function PostProperty() {
     );
     const uploadedImages = await res.json() 
     console.log("Uploaded Images:", uploadedImages)
-      newImageArray.push({filename: `${image.name}${uploadedImages.url}`, imageUrls: uploadedImages.url})}
+      newImageArray.push({filename: `${image.name}${uploadedImages.url}`, imageUrls: uploadedImages.url, type: 'video'})}
       console.log("newImageArray", newImageArray)
     }}catch(error){console.log("Error uploading image:", error)}}
     
 
     // Handle form submission logic here
     const form = e.target as HTMLFormElement;
-    const title = (form.elements.namedItem("title") as HTMLInputElement).value;
-    const price = (form.elements.namedItem("price") as HTMLInputElement).value;
-    const description = (form.elements.namedItem("description") as HTMLTextAreaElement).value;
-    const propertyType = (form.elements.namedItem("property-type") as HTMLSelectElement).value;
-    const bedrooms = (form.elements.namedItem("bedrooms") as HTMLSelectElement).value;
-    const bathrooms = (form.elements.namedItem("bathrooms") as HTMLSelectElement).value;
-    const sqft = (form.elements.namedItem("sqft") as HTMLInputElement).value;
-    const parking = (form.elements.namedItem("parking") as HTMLInputElement).value;
-    const address = (form.elements.namedItem("address") as HTMLInputElement).value;
-    const city = (form.elements.namedItem("city") as HTMLInputElement).value;
-    const state = (form.elements.namedItem("state") as HTMLInputElement).value;
-    const zip = (form.elements.namedItem("zip") as HTMLInputElement).value;
-    const country = (form.elements.namedItem("country") as HTMLInputElement).value;
+    const title = (form.elements.namedItem("title") as HTMLInputElement)?.value;
+    const price = (form.elements.namedItem("price") as HTMLInputElement)?.value;
+    const description = (form.elements.namedItem("description") as HTMLTextAreaElement)?.value;
+    const propertyType = (form.elements.namedItem("property-type") as HTMLSelectElement)?.value;
+    const bedrooms = (form.elements.namedItem("bedrooms") as HTMLSelectElement)?.value;
+    const bathrooms = (form.elements.namedItem("bathrooms") as HTMLSelectElement)?.value;
+    const sqft = (form.elements.namedItem("sqft") as HTMLInputElement)?.value;
+    const parking = (form.elements.namedItem("parking") as HTMLInputElement)?.value;
+    const address = (form.elements.namedItem("address") as HTMLInputElement)?.value;
+    const city = (form.elements.namedItem("city") as HTMLInputElement)?.value;
+    const state = (form.elements.namedItem("state") as HTMLInputElement)?.value;
+    const zip = (form.elements.namedItem("zip") as HTMLInputElement)?.value;
+    const country = (form.elements.namedItem("country") as HTMLInputElement)?.value;
     const long = (form.elements.namedItem("long") as HTMLInputElement)?.value;
     const lat = (form.elements.namedItem("lat") as HTMLInputElement)?.value;
     const role = (form.elements.namedItem("role") as HTMLInputElement).value;
@@ -132,7 +147,7 @@ export function PostProperty() {
       bedrooms: bedrooms,
       bathrooms: bathrooms,
       areaSqFt: sqft,
-      images: newImageArray.map((image: { imageUrls: string }) => image.imageUrls), // Use the uploaded image URLs
+      images: newImageArray.map((image: { imageUrls: string; type: string } ) => ({imageUrl: image.imageUrls, type: image.type})), // Use the uploaded image URLs
     }
     
     console.log("Property Data:", propertyData)
@@ -177,16 +192,18 @@ export function PostProperty() {
   }]
 
 const [modalOpen, setModalOpen] = useState<boolean>(true);
+const {activeTab} = useContext(ActiveTab_Context);
 useEffect(()=>{
-  if(modalOpen){
+  if(modalOpen&&activeTab=='post'){
     document.body.classList.add('overflow-hidden');
   }
   else{
     document.body.classList.remove('overflow-hidden')
   }
-
-  console.log(selectedRole)
-},[modalOpen]);
+  return () => {
+    document.body.classList.remove('overflow-hidden');
+  };
+},[activeTab, modalOpen]);
 
 const [selectedRole, setSelectedRole] = useState<string>('');
 const selectedRoleData = roles.find((role)=>{
@@ -196,7 +213,10 @@ const selectedRoleData = roles.find((role)=>{
 const [open, setOpen] = useState<boolean>(false)
 
 
-//
+//remove image or video file
+const removeImage = (index: number) => {
+  setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+}
 
   return (
     <div className="relative container px-4 py-6 md:px-6 md:py-8 ">
@@ -334,7 +354,7 @@ const [open, setOpen] = useState<boolean>(false)
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="property-type">Property Type</Label>
-                  <Select>
+                  <Select value={} onValueChange={(value) => }>
                     <SelectTrigger id="property-type">
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
@@ -510,11 +530,11 @@ const [open, setOpen] = useState<boolean>(false)
                 {images.length > 0 && (
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                     {images.map((image, index) => (
-                      <div key={index} className="relative aspect-square rounded-md">
+                      <div key={index} className="flex relative aspect-square rounded-md">
                         {image.file.type.startsWith('image/')&&<img
                           src={image.imageUrls || "/placeholder.svg"}
                           alt={`Property image ${index + 1}`}
-                          className="h-full w-full rounded-md object-cover"
+                          className="h-full w-full rounded-md object-contain"
                         />}
                         {image.file.type.startsWith('video/')&&(<video
                           src={image.imageUrls}
@@ -523,6 +543,7 @@ const [open, setOpen] = useState<boolean>(false)
                           className="h-full w-full rounded-md"
                           muted
                         />)}
+                        <button type='button' onClick={()=>{removeImage(index)}} className="absolute cursor-pointer justify-center items-center right-1 bg-red-600 h-[25px] w-[25px] rounded-full text-white">x</button>
                       </div>
                     ))}
                   </div>

@@ -53,18 +53,26 @@ export default async function PropertyDetailsPage({
     // fetch data based on id
     const docRef = doc(firestoreDb, "approved_properties", id); 
     const docSnap = await getDoc(docRef);
+    var property:any;
+    var docSnap2:any;
     if (!docSnap.exists()) {
-        return <div>Property not found</div>
+          const docRef2 = doc(firestoreDb, "properties", id); 
+          docSnap2 = await getDoc(docRef2);
+            if (!docSnap2.exists()){return <div>Property not found</div>}
         }
-    const property = docSnap.data();
+    if (docSnap.exists()) {
+    property = docSnap.data();}
+    else if (docSnap2.exists()) {
+      property = docSnap2.data();
+    }
 
   //fetch user data based on property.id
-  const userRef = doc(firestoreDb, "users", property.userId);
-  const userSnap = await getDoc(userRef);
-  if (!userSnap.exists()) {
-    return <div>User not found</div>
-  }
-  const user = userSnap.data();
+  // const userRef = doc(firestoreDb, "users", property.userId);
+  // const userSnap = await getDoc(userRef);
+  // if (!userSnap.exists()) {
+  //   return <div>User not found</div>
+  // }
+  // const user = userSnap.data();
 
 
 
@@ -151,10 +159,13 @@ export default async function PropertyDetailsPage({
       <div className="flex w-full justify-center m-10">
       <Carousel className="w-full max-w-xs">
       <CarouselContent>
-        {property.images.map((image:string, index:Key) => (
+        {property.images.map((imageUrl:string, type:string, index:Key) => (
           <CarouselItem key={index}>
             <div className="p-1">
-                  <Image src={image} alt={image} height={600} width={800} className=" object-contain"/>
+                 {type==='image'?
+                  <Image src={imageUrl} alt={imageUrl} height={600} width={800} className=" object-contain"/>
+                  :<video src={imageUrl} controls className="w-full h-auto object-contain"/>
+                 }
             </div>
           </CarouselItem>
         ))}

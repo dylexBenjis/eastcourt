@@ -21,8 +21,8 @@ export const Property_schema =z.object( {
     bedrooms   :     z.string().optional(), // Optional field
     bathrooms  :    z.string().optional(), // Optional field
     areaSqFt   :   z.string().optional(), // Optional field
-    images     :   z.array(z.string()).optional(), // URLs of uploaded images
-    // userId    :       z.string().optional(), // @relation(fields: [userId], references: [id])
+    images     :   z.array(z.object({imageUrl: z.string().optional(), type: z.string().optional()})).optional(), // URLs of uploaded images
+    // user    :       User_schema.optional(), // @relation(fields: [userId], references: [id])
     createdAt       :z.string().optional(),// @default(now())
     updatedAt       :z.string().optional(),// @updatedAt
   });
@@ -121,6 +121,11 @@ export async function Approve_property(propertyId: string) {
         
         // Optionally, you can delete the original property document if needed
         await deleteDoc(propertyRef);
+
+                    toast({
+                title: "Property Approved 🎉",
+                description: "Your property was been approved successfully.",
+            })
 
 
         
