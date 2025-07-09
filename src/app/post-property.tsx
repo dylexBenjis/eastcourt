@@ -354,7 +354,7 @@ const removeImage = (index: number) => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="property-type">Property Type</Label>
-                  <Select value={} onValueChange={(value) => }>
+                  <Select>
                     <SelectTrigger id="property-type">
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
