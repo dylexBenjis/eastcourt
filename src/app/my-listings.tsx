@@ -156,7 +156,7 @@ fetch_ApprovedListings();
              {approved_Listings.map((listing) => (
                 <Card key={listing.id} className="overflow-hidden">
                 <div className="relative h-48 w-full">
-                {listing.images==undefined?<Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
+                {!listing.images || listing.images.length==0?<Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
     : <Image src={listing.images[0].imageUrl || "/placeholder.svg"} alt={listing.images[0].imageUrl || "Property image"} fill className="object-cover" />
          
 }
@@ -255,9 +255,9 @@ fetch_ApprovedListings();
              {myListings.map((listing) => (
                 <Card key={listing.id} className="overflow-hidden">
                 <div className="relative h-48 w-full">
-                {listing.images==undefined?<Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
-    : <Image src={listing.images[0].imageUrl || "/placeholder.svg"} alt={listing.images[0].imageUrl || "/placeholder.svg"} fill className="object-cover" />
-         
+{!listing.images || listing.images.length === 0
+  ? <Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
+  : <Image src={(listing.images[0]?.imageUrl) ?? "/placeholder.svg"} alt={listing.images[0]?.imageUrl || "/placeholder.svg"} fill className="object-cover" />
 }
                   
                   <Badge className="absolute right-2 top-2 bg-primary">${(listing.price??0).toLocaleString()}</Badge>
@@ -356,7 +356,7 @@ fetch_ApprovedListings();
               {approved_Listings.map((listing) => (
                 <Card key={listing.id} className="overflow-hidden">
                 <div className="relative h-48 w-full">
-                {listing.images==undefined?<Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
+                {!listing.images || listing.images.length==0?<Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
     : <Image src={listing.images[0].imageUrl || "/placeholder.svg"} alt={listing.images[0].imageUrl || "/placeholder.svg"} fill className="object-cover" />
          
 }
@@ -441,7 +441,7 @@ fetch_ApprovedListings();
                 {myListings.map((listing) => (
                 <Card key={listing.id} className="overflow-hidden">
                 <div className="relative h-48 w-full">
-                {listing.images==undefined?<Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
+                {!listing.images || listing.images.length==0?<Image src={"/placeholder.svg"} alt={''} fill className="object-cover" />
     : <Image src={listing.images[0].imageUrl || "/placeholder.svg"} alt={listing.images[0].imageUrl || "/placeholder.svg"} fill className="object-cover" />
          
 }
