@@ -25,6 +25,7 @@ import { firestoreDb } from "@/src/lib/firebase"
 import { collection, doc, getDoc, getDocs } from "firebase/firestore"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/src/components/ui/carousel"
 import { Key } from "react"
+import EmblaCarousel from "@/src/components/carousel-ui/emblacarousel"
 
 //define dynamic paths
 export async function generateStaticParams() {
@@ -156,23 +157,9 @@ export default async function PropertyDetailsPage({
       </div> */}
 
 
-      <div className="flex w-full justify-center m-10">
-      <Carousel className="w-full max-w-xs">
-      <CarouselContent>
-        {property.images.map((imageUrl:string, type:string, index:Key) => (
-          <CarouselItem key={index}>
-            <div className="p-1">
-                 {type==='image'?
-                  <Image src={imageUrl} alt={imageUrl} height={600} width={800} className=" object-contain"/>
-                  :<video src={imageUrl} controls className="w-full h-auto object-contain"/>
-                 }
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      {/* <CarouselPrevious />
-      <CarouselNext /> */}
-    </Carousel></div>
+      <div className="flex w-full justify-center">
+      <EmblaCarousel slides={property.images}/>
+      </div>
       
 
       {/* Property Overview */}

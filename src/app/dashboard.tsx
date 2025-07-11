@@ -34,15 +34,16 @@ export default function Dashboard(props: { activeTab: string }) {
   
   console.log(theme)
   return (
-      <div className="flex min-h-screen flex-col">
+      <div className="">
         {/* Top Navigation Bar */}
 
 
 
 
         {/* Main Content */}
-        <main className="flex-1 w-full">
-          {activeTab === "home" && <HomePage />}
+        <main className="">
+          
+            {activeTab === "home" && <HomePage/>}
           <div className=' lg:w-[1200px] max-w-[1200px] container'>
           {activeTab === "mylistings" && <MyListings />}
           {activeTab === "post" && <PostProperty />}
