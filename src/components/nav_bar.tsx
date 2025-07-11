@@ -34,7 +34,7 @@ const NavBar=()=>{
     const pathname= usePathname();
 
 return(
-    <div className="sticky container top-0 flex justify-center w-screen bg-background z-50">
+    <div className="sticky  top-0 flex justify-center w-screen bg-background z-50">
         <div className="container lg:max-w-[1200px]">
     <header className=" z-50 border-b bg-background">
     <div className="container flex h-16 items-center justify-between px-4 md:px-6">
