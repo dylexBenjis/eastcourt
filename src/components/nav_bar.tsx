@@ -81,7 +81,7 @@ return(
               if(setActiveTab){ setActiveTab('home')}}}
           >
           <Image src='/EAST-COURT-LOGO-2.png' alt='' height={50} width={50}/>
-          <Image src='/EAST-COURT-LOGO-1.png' alt=''  height={40} width={80}/>
+          <div className="h-[40px] w-[140px] relative "><Image src='/EAST-COURT-LOGO-1.png' alt='' fill/></div>
           </Button>
       {(!(pathname==='/eastcourt_admin'))?<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
         {[
