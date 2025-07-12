@@ -186,8 +186,8 @@ useEffect(() => {
 
 
          {/* Recent Listings */}
-         <div className='my-6 h-auto w-screen justify-center items-center flex overflow-hidden'>
-      <div className='flex flex-col  lg:w-[1200px] max-w-[1200px] bg-orange-400'>
+         <div className='my-6 h-auto w-screen justify-center items-center flex'>
+      <div className='flex flex-col  lg:w-[1200px] max-w-[1200px]'>
         <h2 className="mb-6 text-2xl font-bold">Recently Listed Properties</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {(recent_listing.length === 0)?

@@ -13,7 +13,8 @@ export const Property_schema =z.object( {
     title    :        z.string().optional(),
     description  :    z.string().optional(),
     price    :       z.number().optional(), // e.g. 1000000
-    propertyType:    z.string().optional(),  // e.g. "apartment", "house", "land"
+    property_type:    z.string().optional(),  // e.g. "apartment", "house", "land"
+    rent_period: z.string().optional(),
     label    :        z.string().optional(), // Enum for property label
     address:       z.string().optional(), // Address of the property
     role :        z.string().optional(), // strings for role of property poster
@@ -59,7 +60,8 @@ export async function Create_new_property(req:Property) {
                 title: property.title,
                 description: property.description,
                 price: property.price,
-                propertyType: property.propertyType,
+                property_type: property.property_type,
+                rent_period: property.rent_period,
                 label: property.label,
                 parking: property.parking,
                 address: property.address,

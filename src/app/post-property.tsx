@@ -69,7 +69,12 @@ export function PostProperty() {
       console.log("Images:", images,)
     },) 
 
-  // Handle form submission
+    
+    const[bedrooms, setBedrooms]= useState<string>('0')
+    const[bathrooms, setBathrooms]= useState<string>('0')
+    const[property_type, setPropertyType]= useState<string>('')
+    const[rent_period, setRentPeriod]= useState<string>('monthly')
+    // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     
     e.preventDefault();
@@ -118,9 +123,6 @@ export function PostProperty() {
     const title = (form.elements.namedItem("title") as HTMLInputElement)?.value;
     const price = (form.elements.namedItem("price") as HTMLInputElement)?.value;
     const description = (form.elements.namedItem("description") as HTMLTextAreaElement)?.value;
-    const propertyType = (form.elements.namedItem("property-type") as HTMLSelectElement)?.value;
-    const bedrooms = (form.elements.namedItem("bedrooms") as HTMLSelectElement)?.value;
-    const bathrooms = (form.elements.namedItem("bathrooms") as HTMLSelectElement)?.value;
     const sqft = (form.elements.namedItem("sqft") as HTMLInputElement)?.value;
     const parking = (form.elements.namedItem("parking") as HTMLInputElement)?.value;
     const address = (form.elements.namedItem("address") as HTMLInputElement)?.value;
@@ -138,14 +140,15 @@ export function PostProperty() {
       description,
       role: role,
       price: parseInt(price),
-      propertyType,
+      property_type,
+      rent_period,
       label: listingType === "sale" ? "FOR__SALE" : "FOR_RENT",
     address: locationType==='address'?`${address}, ${city}, ${state}, ${zip}, ${country}`:`${lat},${long}`,
       // location:`${city}, ${state}, ${zip}, ${country}`,
       parking: parking,
       // userId: user?.uid, // Replace with actual user ID
-      bedrooms: bedrooms,
-      bathrooms: bathrooms,
+      bedrooms,
+      bathrooms,
       areaSqFt: sqft,
       images: newImageArray.map((image: { imageUrls: string; type: string } ) => ({imageUrl: image.imageUrls, type: image.type})), // Use the uploaded image URLs
     }
@@ -323,7 +326,9 @@ const removeImage = (index: number) => {
               {listingType === "rent" && (
                 <div className="space-y-2">
                   <Label htmlFor="rent-period">Rent Period</Label>
-                  <Select defaultValue="monthly">
+                  <Select  value={rent_period} onValueChange={(value)=>{
+                    setRentPeriod(value)
+                  }}>
                     <SelectTrigger id="rent-period">
                       <SelectValue placeholder="Select period" />
                     </SelectTrigger>
@@ -354,7 +359,9 @@ const removeImage = (index: number) => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="property-type">Property Type</Label>
-                  <Select>
+                  <Select value={property_type} onValueChange={(value)=>{
+                    setPropertyType(value)
+                  }}>
                     <SelectTrigger id="property-type">
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
@@ -369,7 +376,9 @@ const removeImage = (index: number) => {
 
                 <div className="space-y-2">
                   <Label htmlFor="bedrooms">Bedrooms</Label>
-                  <Select>
+                  <Select value={bedrooms} onValueChange={(value)=>{
+                    setBedrooms(value)
+                  }}>
                     <SelectTrigger id="bedrooms">
                       <SelectValue placeholder="Select number" />
                     </SelectTrigger>
@@ -385,7 +394,9 @@ const removeImage = (index: number) => {
 
                 <div className="space-y-2">
                   <Label htmlFor="bathrooms">Bathrooms</Label>
-                  <Select>
+                  <Select  value={bathrooms} onValueChange={(value)=>{
+                    setBathrooms(value)
+                  }}>
                     <SelectTrigger id="bathrooms">
                       <SelectValue placeholder="Select number" />
                     </SelectTrigger>

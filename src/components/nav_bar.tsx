@@ -34,10 +34,10 @@ const NavBar=()=>{
     const pathname= usePathname();
 
 return(
-    <div className="sticky  top-0 flex justify-center w-screen bg-background z-50">
+    <div className="sticky top-0 flex justify-center w-screen bg-background z-50">
         <div className="container lg:max-w-[1200px]">
     <header className=" z-50 border-b bg-background">
-    <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+    <div className="container flex h-16 items-center justify-between px-4 md:px-1">
       <div className="flex items-center gap-4 md:hidden">
         <Sheet>
           <SheetTrigger asChild>
@@ -75,12 +75,12 @@ return(
 
       </div>
       <Button
-            variant='ghost'
+            variant="logo"
             onClick={() => {
               if(setActiveTab){ setActiveTab('home')}}}
           >
-            <Home className="h-5 w-5" />
-            <span className=" inline-block">Eastcourt</span>
+          <Image src='/EAST-COURT-LOGO-2.png' alt='' height={50} width={50}/>
+          <Image src='/EAST-COURT-LOGO-1.png' alt=''  height={40} width={80}/>
           </Button>
       {(!(pathname==='/eastcourt_admin'))?<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
         {[
