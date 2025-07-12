@@ -29,6 +29,20 @@ export function PostProperty() {
     imageUrls: string;
     name: string;
   }
+    //select role
+
+  const roles =[{
+    value:'landlord',
+    label:'Landlord',
+    icon: Building2,
+    description:'Property owner'
+  },
+  {
+    value:'agent',
+    label:'Agent',
+    icon: UserCheck,
+    description:''
+  }]
   const [images, setImages] = useState<imageProps[]>([])
   const [uploading, setUploading] = useState<boolean>()  
   const [listingType, setListingType] = useState("sale")
@@ -36,6 +50,10 @@ export function PostProperty() {
   //location type
     const [locationType, setLocationType] = useState("coordinate")
 
+const [selectedRole, setSelectedRole] = useState<string>('');
+const selectedRoleData = roles.find((role)=>{
+  role.value === selectedRole
+})
 
   //user
   const {user, loading} = useContext(AuthState_Context);
@@ -74,6 +92,8 @@ export function PostProperty() {
     const[bathrooms, setBathrooms]= useState<string>('0')
     const[property_type, setPropertyType]= useState<string>('')
     const[rent_period, setRentPeriod]= useState<string>('monthly')
+
+    const formRef = React.useRef<HTMLFormElement>(null)
     // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     
@@ -158,18 +178,24 @@ export function PostProperty() {
     // Here you would typically send the propertyData to your backend or API
     try{
       const new_property = await Create_new_property({...propertyData});
-      setUploading(false);
+
         //@ts-ignore
       if (new_property) {
       sessionStorage.removeItem('my-listings')
+
     } }
     catch(error){console.log('error uploading to firebase')}
     console.log("Form submitted");
-
+      setUploading(false);
+      window.scrollTo({top:0,behavior:'smooth'});
+      formRef.current?.reset(); // Reset the form after submission if formRef.current is not null
+      setImages([]);
+      setSelectedRole(''); 
+      setModalOpen(true)
 
   }
 
-
+useEffect(() => {console.log(selectedRole, 'selected role')}, [])
 
   //handle select images button click
   const imageInputRef = React.useRef<HTMLInputElement>(null)
@@ -180,20 +206,7 @@ export function PostProperty() {
   }
 
 
-  //select role
 
-  const roles =[{
-    value:'landlord',
-    label:'Landlord',
-    icon: Building2,
-    description:'Property owner'
-  },
-  {
-    value:'agent',
-    label:'Agent',
-    icon: UserCheck,
-    description:''
-  }]
 
 const [modalOpen, setModalOpen] = useState<boolean>(true);
 const {activeTab} = useContext(ActiveTab_Context);
@@ -209,10 +222,7 @@ useEffect(()=>{
   };
 },[activeTab, modalOpen]);
 
-const [selectedRole, setSelectedRole] = useState<string>('');
-const selectedRoleData = roles.find((role)=>{
-  role.value === selectedRole
-})
+
 
 const [open, setOpen] = useState<boolean>(false)
 
@@ -283,7 +293,7 @@ const removeImage = (index: number) => {
 
       <Card>
         <CardContent className="p-6">
-          <form className="space-y-8" onSubmit={handleSubmit}>
+          <form className="space-y-8" onSubmit={handleSubmit} ref={formRef}>
             {/* Basic Information */}
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Basic Information</h2>

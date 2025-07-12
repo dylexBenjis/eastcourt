@@ -30,7 +30,7 @@ export function AuthForm({ type }: AuthFormProps) {
       const user = result.user;
       await Create_user_in_db({ userID: user.uid, userName: user.displayName, userImageUrl: user.photoURL, location: "", properties: [], favourites: [] })
       .then(() => {
-        if(setActiveTab) setActiveTab("home")})
+        if(setActiveTab) setActiveTab("my-listings")})
     } catch (error) {
       console.error("Authentication error:", error)
     } finally {
