@@ -258,7 +258,7 @@ export default async function PropertyDetailsPage({
                     loading="lazy"
                     allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
-                    src={`https://www.google.com/maps?q=${property.address}&output=embed`}>
+                    src={`https://www.google.com/maps?q=${property.location}&output=embed`}>
                   </iframe>
                   </div>
                   <h4 className="font-medium mb-3">Address</h4>

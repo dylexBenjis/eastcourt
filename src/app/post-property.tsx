@@ -143,7 +143,8 @@ export function PostProperty() {
       property_type,
       rent_period,
       label: listingType === "sale" ? "FOR__SALE" : "FOR_RENT",
-    address: locationType==='address'?`${address}, ${city}, ${state}, ${zip}, ${country}`:`${lat},${long}`,
+    location: lat===undefined?`${address}, ${city}, ${state}, ${zip}, ${country}`:`${lat},${long}`,
+      address:`${address}, ${city}, ${state}, ${zip}, ${country}`,
       // location:`${city}, ${state}, ${zip}, ${country}`,
       parking: parking,
       // userId: user?.uid, // Replace with actual user ID
@@ -446,8 +447,8 @@ const removeImage = (index: number) => {
               <h2 className="text-xl font-semibold">Location</h2>
 
                             <div className="space-y-2">
-                <Label>Choose coordinate for precise location on google map</Label>
-                <RadioGroup defaultValue="coordinate" className="flex gap-4" onValueChange={setLocationType}>
+                <Label>Include coordinate for precise location on google map</Label>
+                {/* <RadioGroup defaultValue="coordinate" className="flex gap-4" onValueChange={setLocationType}>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="coordinate" id="coordinate" />
                     <Label htmlFor="coordinate" className="cursor-pointer">
@@ -460,10 +461,10 @@ const removeImage = (index: number) => {
                       Address
                     </Label>
                   </div>
-                </RadioGroup>
+                </RadioGroup> */}
               </div>
 
-              {locationType==='coordinate'&&<div className="grid gap-4 md:grid-cols-2">
+              {/* {locationType==='coordinate'&&<div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="long">Longitude</Label>
                   <Input id="longitude" placeholder="longitude" />
@@ -472,16 +473,16 @@ const removeImage = (index: number) => {
                 {/* <div className="space-y-2">
                   <Label htmlFor="unit">Unit/Apt</Label>
                   <Input id="unit" placeholder="Apartment or unit number" />
-                </div> */}
+                </div> *
 
                 <div className="space-y-2">
                   <Label htmlFor="lat">Latitude</Label>
                   <Input id="latitude" placeholder="latitude" />
                 </div>
 
-              </div>}
+              </div>} */}
                 
-              {locationType==='address'&&<div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
                   <Input id="address" placeholder="Street address" />
@@ -511,7 +512,21 @@ const removeImage = (index: number) => {
                   <Label htmlFor="country">Country</Label>
                   <Input id="country" placeholder="Country" />
                 </div>
-              </div>}
+              </div>
+                              <div className="space-y-2">
+                  <Label htmlFor="long">Longitude</Label>
+                  <Input id="longitude" placeholder="longitude" />
+                </div>
+
+                {/* <div className="space-y-2">
+                  <Label htmlFor="unit">Unit/Apt</Label>
+                  <Input id="unit" placeholder="Apartment or unit number" />
+                </div> */}
+
+                <div className="space-y-2">
+                  <Label htmlFor="lat">Latitude</Label>
+                  <Input id="latitude" placeholder="latitude" />
+                </div>
             </div>
 
             {/* Images */}
