@@ -78,7 +78,8 @@ export default async function PropertyDetailsPage({
 
 
   return (
-      <div className=" flex justify-center min-h-screen w-screen mt-10"><div className="container lg:max-w-[1200px]">
+      <div className=" flex justify-center min-h-screen w-screen mt-10">
+        <div className="container lg:max-w-[1200px] px-5">
       {/* Property Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <div>
@@ -157,7 +158,7 @@ export default async function PropertyDetailsPage({
       </div> */}
 
 
-      <div className="flex w-full justify-center">
+      <div className="flex w-full justify-center mb-5">
       <EmblaCarousel slides={property.images}/>
       </div>
       
