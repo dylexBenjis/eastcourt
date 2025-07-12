@@ -25,6 +25,7 @@ const NavBar=()=>{
     const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
 
     const {activeTab, setActiveTab} = useContext(ActiveTab_Context);
+    console.log(theme,systemTheme,resolvedTheme, 'navbar theme');
   
     //user
     const {user, loading} = useContext(AuthState_Context);
@@ -125,11 +126,14 @@ return(
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => {setTheme(theme === "dark" ? "light" : "dark"); console.log('clicked ',theme)}}
+          onClick={() => {setTheme(theme === "dark" ? "light" : "dark"); console.log('clicked ',theme, systemTheme,resolvedTheme)}}
           aria-label="Toggle theme" className="flex justify-center items-center"
         >
-          {theme==='light'&&<Sun className="h-5 w-5" />}
-          {theme==='dark'&&<Moon className="h-5 w-5" />}
+          
+          {(theme==='system'&&systemTheme==='dark')&&<Sun className="h-5 w-5" />}
+          {(theme==='system'&&systemTheme==='light')&&<Moon className="h-5 w-5" />}
+          {theme==='dark'&&<Sun className="h-5 w-5" />}
+          {theme==='light'&&<Moon className="h-5 w-5" />}
         </Button>
         {/* <Button className="flex justify-center items-center" variant="ghost" size="icon" aria-label="Notifications">
           <Bell className="h-5 w-5" />
