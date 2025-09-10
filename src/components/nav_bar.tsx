@@ -95,7 +95,6 @@ return(
             key={item.name}
             variant={activeTab === item.tab ? "secondary" : "ghost"}
             onClick={() => {
-              router.push(`/`);
               if(setActiveTab){ setActiveTab(item.tab)}}}
           >
             {item.name}
@@ -115,7 +114,6 @@ return(
             variant={activeTab === item.tab ? "secondary" : "ghost"}
             onClick={ () => {
               if(setActiveTab){ setActiveTab(item.tab)}
-              router.push(`/`);
               }}
           >
             {item.name}

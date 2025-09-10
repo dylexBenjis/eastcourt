@@ -12,7 +12,7 @@ export async function getListings(){
       return result;
    }catch(error) {
     console.error("Error fetching listings:", error);
-    return [];
+    return false;
    }
 }
 
@@ -27,6 +27,6 @@ export async function getApprovedListings(){
       return result;
    }catch(error) {
     console.error("Error fetching listings:", error);
-    return [];
+    return false;
    }
 }

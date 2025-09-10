@@ -33,6 +33,7 @@ export type Property = z.infer<typeof Property_schema>; // This will infer the T
 
 export type Approved_property = z.infer<typeof Property_schema>; // This will infer the TypeScript type from the Zod schema and add userId
 
+//create new property
 export async function Create_new_property(req:Property) {
     try{ 
         // Parse the request body using Zod schema
@@ -137,4 +138,51 @@ export async function Approve_property(propertyId: string) {
     } catch (error) {
         console.error("Error approving property:", error);
     }
+}
+
+//update property
+export async function Update_new_property(req:Property) {
+    try{ 
+        // Parse the request body using Zod schema
+        // This will validate the input and return an error if the validation fails
+        const parsedBody = Property_schema.safeParse(req)
+        console.log('parsedBody', parsedBody);
+    
+        if (!parsedBody.success) {
+            return new Response(JSON.stringify(parsedBody.error), { status: 400 });
+        }
+    
+        const property = parsedBody.data;
+    
+        // Here you would typically save the property to a database
+        console.log('updating in db', property);
+
+        //get lat and lon before saving to db
+        // const axios = require('axios').default;
+        // const location = property.location;
+        // const locationResponse = await axios.get(`https://us1.locationiq.com/v1/search?key=pk.5b2b044697e1f607aaa7303dde49e1e7&q=${location}&format=json&`).then((response: any) => {return response.data[0]});
+        // const lat = locationResponse.lat;
+        // const long = locationResponse.lon;
+        // console.log('lat', lat, 'long', long, 'locationResponse', locationResponse);
+
+        const propertyReference = doc(firestoreDb, "properties", `${property.id}`   );
+            
+            // Update the document with the ID
+                await updateDoc(propertyReference, {
+                    ...property,
+                    // userId: property.userId,
+                    updatedAt: new Date().toISOString(),
+                  });
+    
+            toast({
+                title: "Property Received 🎉",
+                description: "Your property was been received successfully.",
+            })
+        console.log('propertyReference', propertyReference);
+        // Return the ID of the newly created property
+        return propertyReference.id;
+    }catch (error) {
+        console.error("Error creating new property:", error);
+    }
+
 }
