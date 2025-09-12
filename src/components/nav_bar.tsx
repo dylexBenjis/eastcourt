@@ -47,6 +47,7 @@ return(
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
+                {(!(pathname==='/eastcourt_admin'))?
           <SheetContent side="left" className="w-[240px] sm:w-[300px]">
             <nav className="flex flex-col gap-4 py-4">
               {[
@@ -71,7 +72,31 @@ return(
                 </Button>
               ))}
             </nav>
-          </SheetContent>
+          </SheetContent>:<SheetContent side="left" className="w-[240px] sm:w-[300px]">
+            <nav className="flex flex-col gap-4 py-4">
+              {[
+                { name: "Home", icon: <Home className="mr-2 h-4 w-4" />, tab: "home" },
+                { name: "Browse Listings", icon: <Search className="mr-2 h-4 w-4" />, tab: "browse" },
+                { name: "My Listings", icon: <User className="mr-2 h-4 w-4" />, tab: "mylistings" },
+                { name: "Post Property", icon: <Plus className="mr-2 h-4 w-4" />, tab: "post" },
+                // { name: "Messages", icon: <Mail className="mr-2 h-4 w-4" />, tab: "messages" },
+              ].map((item) => (
+                <Button
+                  key={item.name}
+                  variant={activeTab === item.tab ? "secondary" : "ghost"}
+                  className="justify-start"
+                  onClick={() => {
+                    if(setActiveTab) setActiveTab(item.tab);
+                    toast({
+                      title: `${item.name} clicked`,  })
+                  }}
+                >
+                  {item.icon}
+                  {item.name}
+                </Button>
+              ))}
+            </nav>
+          </SheetContent>}
         </Sheet>
 
       </div>
