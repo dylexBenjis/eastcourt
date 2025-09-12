@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import {put} from '@vercel/blob'
 import { useContext, useState } from "react"
 import { Building2, ChevronsUpDown, Upload, UserCheck } from "lucide-react"
@@ -93,7 +93,7 @@ const selectedRoleData = roles.find((role)=>{
     const[property_type, setPropertyType]= useState<string>('')
     const[rent_period, setRentPeriod]= useState<string>('monthly')
 
-    const formRef = React.useRef<HTMLFormElement>(null)
+    const formRef = useRef<HTMLFormElement>(null)
     // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     

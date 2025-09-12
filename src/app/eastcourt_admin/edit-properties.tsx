@@ -12,13 +12,14 @@ import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { SheetTitle } from "@/src/components/ui/sheet"
 import { getBlobToken } from "../actions/actions"
-import { put } from "@vercel/blob"
+import { del, put } from "@vercel/blob"
 import { Property, Update_new_property } from "@/src/lib/upload-properties"
 import { PrevButton } from "@/src/components/carousel-ui/emblacarousel-buttons"
+import CryptoJs from 'crypto-js'
 
 const Edit_Properties = () => {
     const [priceRange, setPriceRange] = useState([50000, 500000])
-    const {edit_list}=useContext(Edit_listing_Context);
+    const {edit_list, approved}=useContext(Edit_listing_Context);
 
     //set states
             const [title, setTitle] = useState(edit_list.title)
@@ -160,13 +161,13 @@ const removeImage = (index: number) => {
           }
     useEffect(()=>{
           if(files){setUpdatedFiles([...files])}
-      console.log('updatedfiles', updatedFiles,'files',files, 'property', propertyData)}, [files,])
+      console.log('updatedfiles', updatedFiles,'files',files, 'property', propertyData,)}, [files,])
 
     useEffect(()=>{
-            check_changes()}, [updatedFiles])
+            check_changes()}, [title, description, role, price, property_type, rent_period, labelValue, location, address, parking, bedrooms, bathrooms, sqft, updatedFiles])
  useEffect(()=>{
 
-      console.log('updatedfiles', updatedFiles,'files',files, 'property', propertyData)}, [propertyData ])
+      console.log('updatedfiles', updatedFiles,'files',files, 'property', propertyData, 'del:', deletedFiles)}, [propertyData ])
 
 
   const handlePropertyUpdate = async (e: React.FormEvent) => {
@@ -214,6 +215,8 @@ const removeImage = (index: number) => {
 
         
           var newImageArray:{type:string;imageUrls: string;filename: string;}[]=[]
+
+          var updatedPropertyData: Property = {};
               if(new_files.length === 0){
                 console.log("No images selected")
                 
@@ -228,9 +231,10 @@ const removeImage = (index: number) => {
                     const uploadedImages = await put(image.name, image.file, { access: 'public', token: token });
                     console.log("Uploaded Images:", uploadedImages)
                     newImageArray.push({filename: `${image.name}${uploadedImages.pathname}`, imageUrls: uploadedImages.url, type: 'image'})
-                    const new_returnedFile = {imageUrls: uploadedImages.url, type: 'image'}
-                  setPropertyData(prev=>({...prev,images:[...(prev.images??[]), new_returnedFile]}))
-                    //upload video to cloudinary
+                    updatedPropertyData = {...propertyData, images:[...(propertyData.images??[]), {imageUrl: uploadedImages.url, type: 'image'}]}
+                  setPropertyData(prev=>({...prev,images:[...(prev.images??[]), {imageUrl: uploadedImages.url, type: 'image'}]}))
+                  }  
+                  //upload video to cloudinary
                     
                   if(image.file.type.startsWith('video/')) {
                     const videoFormData = new FormData();
@@ -248,12 +252,12 @@ const removeImage = (index: number) => {
                   );
                   const uploadedImages = await res.json() 
                   console.log("Uploaded Images:", uploadedImages)
-                  newImageArray.push({filename: `${image.name}${uploadedImages.pathname}`, imageUrls: uploadedImages.url, type: 'image'})
-                  const new_returnedFile = {imageUrls: uploadedImages.url, type: 'video'}
-                  setPropertyData(prev=>({...prev,images:[...(prev.images??[]), new_returnedFile]}))
+                  newImageArray.push({filename: `${image.name}${uploadedImages.pathname}`, imageUrls: uploadedImages.url, type: 'video'})
+                    updatedPropertyData = {...propertyData, images:[...(propertyData.images??[]), {imageUrl: uploadedImages.url, type: 'video'}]}
+                  setPropertyData(prev=>({...prev,images:[...(prev.images??[]), {imageUrl: uploadedImages.url, type: 'video'}]}))
                   }
-                    console.log("newImageArray", newImageArray, updatedFiles)
-                  }}
+                    console.log("newImageArray", newImageArray, propertyData, updatedPropertyData)
+                  }
                 }
                 catch(error){console.log("Error uploading image:", error)}}
               
@@ -280,16 +284,64 @@ const removeImage = (index: number) => {
           //   areaSqFt: sqft,
           //   images: newImageArray.map((image: { imageUrls: string; type: string } ) => ({imageUrl: image.imageUrls, type: image.type})), // Use the uploaded image URLs
           // }
-          console.log("Property Data:", propertyData)
+          console.log("Property Data:", updatedPropertyData)
           // Here you would typically send the propertyData to your backend or API
           try{
-            const new_property = await Update_new_property({...propertyData});
-      
+            let new_property: any = undefined;
+           if(Object.keys(updatedPropertyData).length === 0) { 
+            console.log('enetereddds')
+            new_property = await Update_new_property({property: {...propertyData}, approved})
+          }
+           else{ 
+            new_property = await Update_new_property({property:{...updatedPropertyData}, approved});
+          };
+
               //@ts-ignore
             if (new_property) {
+              console.log(new_property, deletedFiles)
             sessionStorage.removeItem('my-listings')
+            if(deletedFiles.length>0){
+              deletedFiles.forEach(async(file: any) => {
+                if(file.type=='image'){
+                  
+                  const token = await getBlobToken();
+                  await del(file.imageUrl,{ token: token })
+                }
+                if(file.type=='video'){
+                  try{const videoFormData = new FormData();
+                  const public_id= file.imageUrl.split('/upload/')[1]
+                  .replace(/^v\d+\//,'')
+                  .replace(/\.[^.]+$/,'');
+                  const timestamp = Math.floor(Date.now()/1000).toString();
+                  const signature = CryptoJs.SHA1(`public_id=${public_id}&timestamp=${timestamp}-yEDk8Wiv9DGfqXdRWUaeV1m0-U`).toString();
+
+                    videoFormData.append("public_id",public_id)
+                    videoFormData.append("api_key", "382255278373657");
+                    videoFormData.append('timestamp', timestamp)
+                    videoFormData.append('signature', signature)
+                    videoFormData.append('resource_type', 'video')
+                    
+                    for (const [key, value] of videoFormData.entries()) {
+                      console.log(`FormData entry: ${key}:`, value)
+                    }
+                   const res = await fetch(
+                    'https://api.cloudinary.com/v1_1/dgfgdtgkt/video/destroy',
+                    {
+                      method: 'POST',
+                      body: videoFormData,
+                    }
+                   );
+                   
+                  const deleted = await res.json() 
+                  console.log(deleted,'deleted')
+                  setDeletedFiles([])
+                }
+                  catch(error){console.log('error deleting video from cloudinary',error)
+                }
+            }})}
       
-          } }
+          }
+        } 
           catch(error){console.log('error uploading to firebase')}
           console.log("Form submitted");
     

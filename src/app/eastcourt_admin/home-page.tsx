@@ -160,7 +160,7 @@ useEffect(() => {
 <div className='absolute inset-0 max-w-full bg-black bg-opacity-40'></div>
   <div className='relative z-10 flex flex-col gap-5 max-w-[320px] md:max-w-[720px] text-center text-white '>
   <h1  className="text-4xl md:text-5xl font-bold">Welcome to Eastcourt,<br/> where you can submit and find a property suited for you.</h1>
-  <p className="text-md lg:text-lg"><span  onClick={()=>{if(setActiveTab)setActiveTab('post')}} className="cursor-pointer text-blue-500 hover:text-blue-700">Click here</span> to submit properties or scroll down to start viewing properties close to you.</p>
+  <p className="text-md lg:text-lg"><span  onClick={()=>{if(setActiveTab)setActiveTab('post')}} className="cursor-pointer bg-orange-900 hover:bg-orange-950 px-3 py-2 rounded-lg text-white ">Click here</span> to submit properties.</p>
 </div>
 </div>
 

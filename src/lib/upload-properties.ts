@@ -141,21 +141,26 @@ export async function Approve_property(propertyId: string) {
 }
 
 //update property
-export async function Update_new_property(req:Property) {
-    try{ 
+const UpdatePropertyReqSchema = z.object({
+    property: Property_schema,
+    approved: z.boolean(),
+});
+
+export async function Update_new_property(req: { property: Property, approved: boolean }) {
+    try {
         // Parse the request body using Zod schema
         // This will validate the input and return an error if the validation fails
-        const parsedBody = Property_schema.safeParse(req)
+        const parsedBody = UpdatePropertyReqSchema.safeParse(req);
         console.log('parsedBody', parsedBody);
-    
+
         if (!parsedBody.success) {
             return new Response(JSON.stringify(parsedBody.error), { status: 400 });
         }
-    
-        const property = parsedBody.data;
-    
+
+        const data = parsedBody.data;
+
         // Here you would typically save the property to a database
-        console.log('updating in db', property);
+        console.log('updating in db', data.property);
 
         //get lat and lon before saving to db
         // const axios = require('axios').default;
@@ -165,24 +170,59 @@ export async function Update_new_property(req:Property) {
         // const long = locationResponse.lon;
         // console.log('lat', lat, 'long', long, 'locationResponse', locationResponse);
 
-        const propertyReference = doc(firestoreDb, "properties", `${property.id}`   );
             
             // Update the document with the ID
-                await updateDoc(propertyReference, {
-                    ...property,
+            if(data.approved==true){
+                await updateDoc( doc(firestoreDb, "approved_properties", `${data.property.id}`   ), {
+                    ...data.property,
                     // userId: property.userId,
                     updatedAt: new Date().toISOString(),
-                  });
+                  });}
+                  if(data.approved==false){
+                await updateDoc( doc(firestoreDb, "properties", `${data.property.id}`   ), {
+                    ...data.property,
+                    // userId: property.userId,
+                    updatedAt: new Date().toISOString(),
+                  });}
     
             toast({
-                title: "Property Received 🎉",
-                description: "Your property was been received successfully.",
+                title: "Property Updated 🎉",
+                description: "Your property was been updated successfully.",
             })
-        console.log('propertyReference', propertyReference);
-        // Return the ID of the newly created property
-        return propertyReference.id;
+        console.log('propertyReference');
+        // Return the ID of the newly updated property
+        return 'successful';
     }catch (error) {
         console.error("Error creating new property:", error);
     }
 
+}
+
+export async function delete_property(propertyId: string, approved?: boolean) {
+    try {
+        // Get the property document reference
+
+        if(approved) {
+        const propertyRef = doc(firestoreDb, "approved_properties", propertyId);
+            
+        // Delete the property document
+        await deleteDoc(propertyRef);
+        }
+        else {
+            const propertyRef = doc(firestoreDb, "properties", propertyId);
+            
+        // Delete the property document
+        await deleteDoc(propertyRef);
+        }
+
+
+        toast({
+            title: "Property Deleted 🎉",
+            description: "Your property was been deleted successfully.",
+        });
+
+        return 'successful';
+    } catch (error) {
+        console.error("Error deleting property:", error);
+    }
 }

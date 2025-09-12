@@ -17,7 +17,6 @@ import LoginPage from "./signin"
 import { AuthState_Context } from "../lib/auth_state"
 
 import PropertyDetailsPage from "./property-details-page"
-import Edit_Properties from "./edit-properties"
 
 
 export default function Dashboard(props: { activeTab: string }) {
@@ -49,7 +48,6 @@ export default function Dashboard(props: { activeTab: string }) {
           {activeTab === "post" && <PostProperty />}
           {activeTab === "signin" && <LoginPage />}
           {activeTab === "browse" && <Browse_Properties />}
-          {activeTab === "edit-properties" && <Edit_Properties/>}
           {activeTab === "property_details_page" && <PropertyDetailsPage/>}</div>
 
 

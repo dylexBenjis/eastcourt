@@ -19,8 +19,8 @@ const Property_card = ({listing}:any)=>{
     return(
     <Card className="overflow-hidden">
         <div className="relative h-48 w-full">
-         {listing.images==undefined?<Image src={"/placeholder.svg"} alt={'image'} fill className="object-cover" />
-    : <Image src={listing.images[0].imageUrl || "/placeholder.svg"} alt={listing.images[0].imageUrl || "/placeholder.svg"} fill className="object-cover" />
+         {listing.images.length === 0 ? <Image src={"/placeholder.svg"} alt={'image'} fill className="object-cover" />
+    : <Image src={listing.images[0].imageUrl ?? "/placeholder.svg"} alt={listing.images[0].imageUrl || "/placeholder.svg"} fill className="object-cover" />
          
 }
           <Badge className="absolute right-2 top-2 bg-primary px-2 py-1">&#x20A6; {listing.price.toLocaleString()}</Badge>

@@ -14,7 +14,7 @@ import { AuthState_Context} from "../../lib/auth_state"
 import Link from "next/link"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../components/ui/carousel"
 import Property_card from "../../components/property_card"
-import { Approve_property, Approved_property, Property } from "../../lib/upload-properties"
+import { Approve_property, Approved_property, delete_property, Property } from "../../lib/upload-properties"
 import { getApprovedListings, getListings } from "../../lib/get_listings"
 import { Edit_listing_Context } from "@/src/components/edit-listing-provider"
 
@@ -148,7 +148,7 @@ fetch_ApprovedListings();
 
   //header activetab context
   const { setActiveTab} = useContext(ActiveTab_Context);
-  const { setEdit_list} = useContext(Edit_listing_Context);
+  const { setEdit_list, setEdit_list_approved} = useContext(Edit_listing_Context);
 
   return (
     <div className="container px-4 py-6 md:px-6 md:py-8 max-w-[1200px]">
@@ -206,17 +206,17 @@ fetch_ApprovedListings();
                           <Edit className="mr-2 h-4 w-4" />
                           Edit Listing
                         </DropdownMenuItem> */}
-                        <DropdownMenuItem className="flex items-center text-destructive">
+                        <DropdownMenuItem className="flex items-center text-destructive" onClick={async ()=>{ await delete_property((listing.id)??'',true); sessionStorage.removeItem('approved-listings'); get_ApprovedListings()}}>
                           <Trash className="mr-2 h-4 w-4" />
                           Delete Listing
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <p className="flex items-center text-sm text-muted-foreground">
+                  <div className="flex items-center text-sm text-muted-foreground ">
                     <MapPin className="mr-1 h-3 w-3" />
-                    {listing.address}
-                  </p>
+                    <p className="line-clamp-1">{listing.address}</p>
+                  </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-2">
                   <div className="mb-2 flex items-center justify-between">
@@ -245,11 +245,12 @@ fetch_ApprovedListings();
                 <CardFooter className="grid grid-cols-2 gap-2 p-4 pt-0">
                   <Button variant="outline" size="sm" onClick={()=>{if(setActiveTab){ setActiveTab('edit-properties')} 
                   if(setEdit_list){setEdit_list(listing)}
+                  if(setEdit_list_approved){setEdit_list_approved(true)}
                   }}>
                   <Edit className="mr-2 h-4 w-4" />Edit
                   </Button>
                   <Button size='sm' className="hover:bg-gray-900 dark:hover:bg-gray-200 w-full" asChild>
-              <Link href={`/${listing.id}`}>View Details</Link>
+              <Link href={`/eastcourt_admin/${listing.id}`}>View Details</Link>
           </Button>
                 </CardFooter>
               </Card>
@@ -307,7 +308,7 @@ fetch_ApprovedListings();
                           <Grid2x2Check className="mr-2 h-4 w-4" />
                           Approve Listing
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex items-center text-destructive">
+                        <DropdownMenuItem className="flex items-center text-destructive" onClick={async ()=>{ await delete_property((listing.id)??''); sessionStorage.removeItem('my-listings'); get_Listings()}}>
                           <Trash className="mr-2 h-4 w-4" />
                           Delete Listing
                         </DropdownMenuItem>
@@ -344,7 +345,11 @@ fetch_ApprovedListings();
                   </div>
                 </CardContent>
                 <CardFooter className="grid grid-cols-2 gap-2 p-4 pt-0">
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={()=>{if(setActiveTab){ setActiveTab('edit-properties')} 
+                  if(setEdit_list){setEdit_list(listing)}                  
+                  if(setEdit_list_approved){setEdit_list_approved(false)}
+
+                  }}>                  
                   <Edit className="mr-2 h-4 w-4" />Edit
                   </Button>
                   <Button size='sm' className="hover:bg-gray-900 dark:hover:bg-gray-200 w-full" asChild>
@@ -418,7 +423,7 @@ fetch_ApprovedListings();
                           <Edit className="mr-2 h-4 w-4" />
                           Edit Listing
                         </DropdownMenuItem> */}
-                        <DropdownMenuItem className="flex items-center text-destructive">
+                        <DropdownMenuItem className="flex items-center text-destructive" onClick={async ()=>{ await delete_property((listing.id)??'',true); sessionStorage.removeItem('approved-listings'); get_ApprovedListings()}}>
                           <Trash className="mr-2 h-4 w-4" />
                           Delete Listing
                         </DropdownMenuItem>
@@ -499,11 +504,11 @@ fetch_ApprovedListings();
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        {/* <DropdownMenuItem className="flex items-center">
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit Listing
-                        </DropdownMenuItem> */}
-                        <DropdownMenuItem className="flex items-center text-destructive">
+                         <DropdownMenuItem className="flex items-center" onClick={async ()=>{ await Approve_property((listing.id)??''); sessionStorage.removeItem('my-listings'); get_Listings()}} >
+                          <Grid2x2Check className="mr-2 h-4 w-4" />
+                          Approve Listing
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="flex items-center text-destructive" onClick={async ()=>{ await delete_property((listing.id)??''); sessionStorage.removeItem('my-listings'); get_Listings()}}>
                           <Trash className="mr-2 h-4 w-4" />
                           Delete Listing
                         </DropdownMenuItem>
