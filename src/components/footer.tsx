@@ -151,7 +151,7 @@ const Footer = () => {
                 </Link>
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-4 lg:w-[calc(100%/3.5)]">
+            <div className="flex flex-col max-[760px]:justify-center max-[760px]:items-center  gap-4 lg:w-[calc(100%/3.5)]">
               <h1 className="text-lg font-semibold">Contact Us</h1>
               <div className="flex flex-col gap-2 text-start ">
                 <Label>Email-address</Label>

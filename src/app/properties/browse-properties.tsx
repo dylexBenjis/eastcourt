@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Button } from "../../components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import { HomeIcon, Hotel, Search, TypeIcon } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import {
@@ -12,8 +12,8 @@ import {
 } from "../../components/ui/select";
 import { Card, CardContent, CardHeader } from "../../components/ui/card";
 import { MapPin } from "lucide-react";
-import { Label } from "../../components/ui/label";
-import { Input } from "../../components/ui/input";
+import { Label } from "@/src/components/ui/label";
+import { Input } from "@/src/components/ui/input";
 import { Slider } from "../../components/ui/slider";
 import { RecentListings } from "../recent-listings";
 
