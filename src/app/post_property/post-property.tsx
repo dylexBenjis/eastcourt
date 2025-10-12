@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect } from "react"
 import {put} from '@vercel/blob'
 import { useContext, useState } from "react"
 import { Building2, ChevronsUpDown, Upload, UserCheck } from "lucide-react"
@@ -93,7 +93,7 @@ const selectedRoleData = roles.find((role)=>{
     const[property_type, setPropertyType]= useState<string>('')
     const[rent_period, setRentPeriod]= useState<string>('monthly')
 
-    const formRef = useRef<HTMLFormElement>(null)
+    const formRef = React.useRef<HTMLFormElement>(null)
     // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     
@@ -237,7 +237,7 @@ const removeImage = (index: number) => {
       
     {/*choose role ui*/}
       {modalOpen&&
-      <div className='fixed inset-0 flex justify-center items-center h-screen z-999 bg-black/80 '>
+      <div className='fixed inset-0 flex justify-center items-center h-screen z-[999] bg-black/80 '>
         <div className='flex justify-center flex-col h-auto p-8 border-[1px] rounded-sm border-gray-500 bg-[background]'>
           <div className='flex text-center flex-col gap-2'>
             <h2 className="font-bold text-xl">Select Role</h2>
@@ -269,7 +269,8 @@ const removeImage = (index: number) => {
                           value={role.label} 
                           onSelect={(currentValue: React.SetStateAction<string>)=>{
                             setSelectedRole(currentValue===selectedRole?'':currentValue); setOpen(false); setModalOpen(false)
-                          }}>
+                          }}
+                          className="cursor-pointer">
                             <role.icon className='w-5 h-5'/>                        
                             <span>{role.label}</span>
 

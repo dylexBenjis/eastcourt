@@ -12,64 +12,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/src/components/ui/slider"
 import { Badge } from "@/src/components/ui/badge"
 import Property_card from "@/src/components/property_card"
-import { ActiveTab_Context } from "../components/activeTab-provider"
-import { AuthState_Context } from "../lib/auth_state"
-import Browse_Properties from "./browse-properties"
+import { ActiveTab_Context } from "../../components/activeTab-provider"
+import { AuthState_Context } from "../../lib/auth_state"
+import Browse_Properties from "./properties/browse-properties"
 import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
-import { firestoreDb } from "../lib/firebase";
-import { Property } from "../lib/upload-properties"
-import { toast } from "../hooks/use-toast"
-import PropertyCardSkeleton from "../components/property_card_skeleton"
+import { firestoreDb } from "../../lib/firebase";
+import { Property } from "../../lib/upload-properties"
+import { toast } from "../../hooks/use-toast"
+import PropertyCardSkeleton from "../../components/property_card_skeleton"
 
 
 
 
 
-export function HomePage() {
+export function RecentListings() {
   const [priceRange, setPriceRange] = useState([50000, 500000])
   const [expanded, setExpanded] = useState(false)
 
-
-  // Sample featured listings data
-  const featuredListings = [
-    {
-      id: 1,
-      title: "Modern Apartment with City View",
-      price: 350000,
-      location: "Downtown, New York",
-      beds: 2,
-      baths: 2,
-      sqft: 1200,
-      type: "Apartment",
-      image: ["/placeholder.svg?height=300&width=400"],
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "Spacious Family Home",
-      price: 450000,
-      location: "Suburbia, California",
-      beds: 4,
-      baths: 3,
-      sqft: 2400,
-      type: "House",
-      image: ["/placeholder.svg?height=300&width=400"],
-      featured: true,
-    },
-    {
-      id: 3,
-      title: "Luxury Penthouse",
-      price: 750000,
-      location: "Marina District, San Francisco",
-      beds: 3,
-      baths: 3.5,
-      sqft: 2000,
-      type: "Penthouse",
-      image: ["/placeholder.svg?height=300&width=400"],
-      featured: true,
-    },
-    ,
-  ]
 
   //skeleton card
   const [expectedListings, setExpectedListings] = useState(0);
@@ -134,7 +93,7 @@ async function Get_recent_listings() {
           setDocIncrement(docincrement + 5); // Increment the document size for the next batch
           setExpectedListings(docincrement+document_size)
         } else {
-          toast({title: 'no more properties to load', variant: 'destructive'});
+          toast({title: 'all properties has been loaded', variant: 'default'});
           // No more properties to load
           setHasMore(false);
         }
@@ -155,41 +114,8 @@ useEffect(() => {
 
 
   return (
-    <div className="">
-<div className="relative h-[calc(100vh/1.5)] bg-[url(/p3.webp)] bg-center bg-no-repeat bg-cover w-screen flex justify-center items-center overflow-hidden">
-<div className='absolute inset-0 max-w-full bg-black bg-opacity-40'></div>
-  <div className='relative z-10 flex flex-col gap-5 max-w-[320px] md:max-w-[720px] text-center text-white '>
-  <h1  className="text-4xl md:text-5xl font-bold">Welcome to Eastcourt,<br/> where you can submit and find a property suited for you.</h1>
-  <p className="text-md lg:text-lg"><span  onClick={()=>{if(setActiveTab)setActiveTab('post')}} className="cursor-pointer text-blue-500 hover:text-blue-700">Click here</span> to submit properties or scroll down to start viewing properties close to you.</p>
-</div>
-</div>
-
-{/*browse properties */}
-{/* 
-<Browse_Properties/> */}
-
-      {/* Featured Listings */}
-      {/* <section className="mb-10 mt-10">
-        <h2 className="mb-6 text-2xl font-bold">Featured Listings</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredListings
-            .filter((listing) => listing.featured)
-            .map((listing, index) => (
-              <Fragment key={index}>
-              <Property_card listing={listing}/>
-              </Fragment>            ))}
-        </div>
-        <div className="mt-6 flex justify-center">
-          <Button variant="outline">View All Properties</Button>
-        </div>
-      </section> */}
-
-
-         {/* Recent Listings */}
-         <div className='my-6 h-auto w-screen justify-center items-center flex'>
-      <div className='flex flex-col  lg:w-[1200px] max-w-[1200px]'>
-        <h2 className="mb-6 text-2xl font-bold">Recently Listed Properties</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {(recent_listing.length === 0)?
           (Array.from({length:5}).map((_, index)=>(<PropertyCardSkeleton key={index}/>))):(recent_listing.map((listing, index) => (
               <Fragment key={index}>
@@ -199,10 +125,9 @@ useEffect(() => {
             {recent_listings_loading && Array.from({ length: expectedListings }).map((_, index) => (<PropertyCardSkeleton key={index} />))}
         </div>
         <div className="mt-6 flex justify-center">
-          {hasMore&&<Button variant="outline" onClick={()=>{Get_recent_listings()}}>View All Properties</Button>}
+          {hasMore&&<Button variant="outline" onClick={()=>{Get_recent_listings()}}>View more Properties</Button>}
         </div>
-      </div></div>
+        </>
 
-    </div>
   )
 }

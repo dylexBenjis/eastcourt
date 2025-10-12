@@ -9,6 +9,7 @@ import { MapPin } from "lucide-react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Slider } from "../../components/ui/slider";
+import { RecentListings } from "../recent-listings"
 
 const Browse_Properties = () => {
     const [priceRange, setPriceRange] = useState([50000, 500000])
@@ -70,6 +71,7 @@ const Browse_Properties = () => {
 
 
     </section>
+    <RecentListings/>
     </div>
     )
 }

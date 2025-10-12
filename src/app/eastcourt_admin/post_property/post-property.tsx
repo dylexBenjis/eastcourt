@@ -12,15 +12,14 @@ import { Label } from "@/src/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
 import { Textarea } from "@/src/components/ui/textarea"
-import { Create_new_property } from "../lib/upload-properties"
-import { AuthState_Context } from "../lib/auth_state"
-import { Update_user_properties } from "../lib/user"
-import { getBlobToken } from "./actions/actions"
-import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover"
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "../components/ui/command"
+import { Create_new_property } from "@/src/lib/upload-properties"
+import { AuthState_Context } from "@/src/lib/auth_state"
+import { Update_user_properties } from "@/src/lib/user"
+import { getBlobToken } from "@/src/app/actions/actions"
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover"
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/src/components/ui/command"
 
-import { toast } from "../hooks/use-toast"
-import { ActiveTab_Context } from "../components/activeTab-provider"
+import { ActiveTab_Context } from "@/src/components/activeTab-provider"
 
 export function PostProperty() {
 

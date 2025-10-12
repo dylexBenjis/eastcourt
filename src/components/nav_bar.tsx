@@ -24,7 +24,6 @@ const NavBar=()=>{
 
     const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
 
-    const {activeTab, setActiveTab} = useContext(ActiveTab_Context);
     console.log(theme,systemTheme,resolvedTheme, 'navbar theme');
   
     //user
@@ -35,7 +34,7 @@ const NavBar=()=>{
     const pathname= usePathname();
 
 return(
-    <div className="sticky top-0 flex justify-center w-screen bg-background z-50">
+    <div className="sticky top-0 flex justify-center w-screen bg-background z-[1000]">
         <div className="container lg:max-w-[1200px]">
     <header className=" z-50 border-b bg-background">
     <div className="container flex h-16 items-center justify-between px-4 md:px-1">
@@ -51,18 +50,18 @@ return(
           <SheetContent side="left" className="w-[240px] sm:w-[300px]">
             <nav className="flex flex-col gap-4 py-4">
               {[
-                { name: "Home", icon: <Home className="mr-2 h-4 w-4" />, tab: "home" },
-                { name: "Browse Listings", icon: <Search className="mr-2 h-4 w-4" />, tab: "browse" },
+                { name: "Home", icon: <Home className="mr-2 h-4 w-4" />, tab: "/" },
+                { name: "Browse Listings", icon: <Search className="mr-2 h-4 w-4" />, tab: "/properties" },
                 // { name: "My Listings", icon: <User className="mr-2 h-4 w-4" />, tab: "mylistings" },
-                { name: "Post Property", icon: <Plus className="mr-2 h-4 w-4" />, tab: "post" },
-                // { name: "Messages", icon: <Mail className="mr-2 h-4 w-4" />, tab: "messages" },
+                { name: "Post Property", icon: <Plus className="mr-2 h-4 w-4" />, tab: "/post_property" },
+                { name: "About Us", icon: <Mail className="mr-2 h-4 w-4" />, tab: "/about_us" },
               ].map((item) => (
                 <Button
                   key={item.name}
-                  variant={activeTab === item.tab ? "secondary" : "ghost"}
+                  variant={pathname === item.tab ? "secondary" : "ghost"}
                   className="justify-start"
                   onClick={() => {
-                    if(setActiveTab) setActiveTab(item.tab);
+                     router.push(item.tab);
                     toast({
                       title: `${item.name} clicked`,  })
                   }}
@@ -75,18 +74,18 @@ return(
           </SheetContent>:<SheetContent side="left" className="w-[240px] sm:w-[300px]">
             <nav className="flex flex-col gap-4 py-4">
               {[
-                { name: "Home", icon: <Home className="mr-2 h-4 w-4" />, tab: "home" },
-                { name: "Browse Listings", icon: <Search className="mr-2 h-4 w-4" />, tab: "browse" },
+                { name: "Home", icon: <Home className="mr-2 h-4 w-4" />, tab: "/" },
+                { name: "Browse Listings", icon: <Search className="mr-2 h-4 w-4" />, tab: "properties" },
                 { name: "My Listings", icon: <User className="mr-2 h-4 w-4" />, tab: "mylistings" },
                 { name: "Post Property", icon: <Plus className="mr-2 h-4 w-4" />, tab: "post" },
-                // { name: "Messages", icon: <Mail className="mr-2 h-4 w-4" />, tab: "messages" },
+                { name: "About Us", icon: <Mail className="mr-2 h-4 w-4" />, tab: "/about_us" },
               ].map((item) => (
                 <Button
                   key={item.name}
-                  variant={activeTab === item.tab ? "secondary" : "ghost"}
+                  variant={pathname === item.tab ? "secondary" : "ghost"}
                   className="justify-start"
                   onClick={() => {
-                    if(setActiveTab) setActiveTab(item.tab);
+                     router.push(item.tab);
                     toast({
                       title: `${item.name} clicked`,  })
                   }}
@@ -103,42 +102,41 @@ return(
       <Button
             variant="logo"
             onClick={() => {
-              if(setActiveTab){ setActiveTab('home')}}}
+               router.push('/')}}
           >
           <Image src='/EAST-COURT-LOGO-2.png' alt='' height={50} width={50}/>
           <div className="h-[40px] w-[140px] relative "><Image src='/EAST-COURT-LOGO-1.png' alt='' fill/></div>
           </Button>
       {(!(pathname==='/eastcourt_admin'))?<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
         {[
-          { name: "Home", tab: "home" },
-          { name: "Browse Listings", tab: "browse" },
+          { name: "Home", tab: "/" },
+          { name: "Browse Listings", tab: "/properties" },
           // { name: "My Listings", tab: "mylistings" },
-          { name: "Post Property", tab: "post" },
-          // { name: "Messages", tab: "messages" },
+          { name: "Post Property", tab: "/post_property" },
+                { name: "About Us", tab: "/about_us" },
         ].map((item) => (
           <Button
             key={item.name}
-            variant={activeTab === item.tab ? "secondary" : "ghost"}
-            onClick={() => {
-              if(setActiveTab){ setActiveTab(item.tab)}}}
+            variant={pathname === item.tab ? "secondary" : "ghost"}
+            onClick={() => { router.push(item.tab)}}
           >
             {item.name}
           </Button>
         ))}
       </nav>:<nav className="hidden md:flex md:items-center md:gap-5 md:text-sm">
         {[
-          { name: "Home", tab: "home" },
-          { name: "Browse Listings", tab: "browse" },
-          { name: "Post Property", tab: "post" },          
+          { name: "Home", tab: "/" },
+          { name: "Browse Listings", tab: "properties" },
+          { name: "Post Property", tab: "post_property" },          
           { name: "My Listings", tab: "mylistings" },
+          { name: "About Us", tab: "/about_us" },
 
-          // { name: "Messages", tab: "messages" },
         ].map((item) => (
           <Button
             key={item.name}
-            variant={activeTab === item.tab ? "secondary" : "ghost"}
+            variant={pathname === item.tab ? "secondary" : "ghost"}
             onClick={ () => {
-              if(setActiveTab){ setActiveTab(item.tab)}
+               router.push(item.tab)
               }}
           >
             {item.name}

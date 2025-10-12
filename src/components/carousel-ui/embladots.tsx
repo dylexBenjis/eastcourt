@@ -1,6 +1,5 @@
 'use client'
 import React, {
-  ComponentPropsWithRef,
   useCallback,
   useEffect,
   useState
@@ -51,7 +50,7 @@ export const useDotButton = (
   }
 }
 
-type PropType = ComponentPropsWithRef<'button'>
+type PropType = { key: number; onClick: () => void; className: string; imageUrl: string | undefined; mediaType: string | undefined; }
 
 export const DotButton: React.FC<PropType> = (props) => {
   const { imageUrl,mediaType, ...restProps } = props

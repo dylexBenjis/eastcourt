@@ -1,9 +1,9 @@
 'use client'
 import type { Metadata } from "next"
 import Link from "next/link"
-import { AuthForm } from "../../components/auth-form"
+import { AuthForm } from "../components/auth-form"
 import { useContext } from "react"
-import { ActiveTab_Context } from "../../components/activeTab-provider"
+import { ActiveTab_Context } from "../components/activeTab-provider"
 
 export const metadata: Metadata = {
   title: "Login",
