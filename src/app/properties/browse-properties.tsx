@@ -1,20 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/src/components/ui/button";
-import { HomeIcon, Hotel, Search, TypeIcon } from "lucide-react";
-import { ChevronDown } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
-import { Card, CardContent, CardHeader } from "../../components/ui/card";
+import { Hotel, Search } from "lucide-react";
 import { MapPin } from "lucide-react";
 import { Label } from "@/src/components/ui/label";
 import { Input } from "@/src/components/ui/input";
-import { Slider } from "../../components/ui/slider";
 import { RecentListings } from "../recent-listings";
 
 const Browse_Properties = () => {
