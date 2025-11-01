@@ -6,6 +6,7 @@ import { Toaster } from "../components/ui/toaster";
 import AuthState_Provider from "../lib/auth_state";
 import NavBar from "../components/nav_bar";
 import Footer from "../components/footer";
+import Edit_listing_Provider from "../components/edit-listing-provider";
 
 export default function RootLayout({
   children,
@@ -17,10 +18,14 @@ export default function RootLayout({
       <body className="">
         <ThemeModeProvider>
           <ActiveTab_Provider>
-            <Toaster />
-            <NavBar />
-            {children}
-            <Footer />
+            <AuthState_Provider>
+              <Edit_listing_Provider>
+                <Toaster />
+                <NavBar />
+                {children}
+                <Footer />
+              </Edit_listing_Provider>
+            </AuthState_Provider>
           </ActiveTab_Provider>
         </ThemeModeProvider>
       </body>
