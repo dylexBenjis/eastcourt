@@ -54,8 +54,8 @@ import {
   Approved_property,
   delete_property,
   Property,
-} from "@/src//lib/upload-properties";
-import { getApprovedListings, getListings } from "@/src//lib/get_listings";
+} from "@/src/lib/upload-properties";
+import { getApprovedListings, getListings } from "@/src/lib/get_listings";
 import { AuthForm } from "@/src/components/auth-form";
 import { useRouter } from "next/navigation";
 import { Edit_listing_Context } from "@/src/components/edit-listing-provider";

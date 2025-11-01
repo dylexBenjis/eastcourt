@@ -172,8 +172,8 @@ export default async function PropertyDetailsPage({
         </div>
 
         {/* Property Overview */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-10">
-          <Card className=" w-[calc(100%/0.6)]">
+        <div className="flex flex-col lg:flex-row gap-6 mb-10 w-full">
+          <Card className=" lg:w-[calc(60%)]">
             <CardContent className="p-6">
               <div className="flex flex-wrap gap-6 mb-6">
                 <div className="flex items-center">
