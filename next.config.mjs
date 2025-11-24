@@ -8,19 +8,26 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      {protocol: 'https', 
+      {
+        protocol: "https",
         hostname: "ejhtl7z1mmsysnco.public.blob.vercel-storage.com",
-        port: '',
-        pathname: '/**'},
-        {protocol: 'https', 
-          hostname: "lh3.googleusercontent.com",
-          port: '',
-          pathname: '/dgfgdtgkt/**'},
-        {protocol: 'https', 
-          hostname: "res.cloudinary.com",
-          port: '',
-          pathname: '/a/**'},
-  ]},
-}
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/dgfgdtgkt/**",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/a/**",
+      },
+    ],
+  },
+};
 
-export default nextConfig
+export default nextConfig;

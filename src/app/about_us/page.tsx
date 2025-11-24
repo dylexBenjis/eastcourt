@@ -1,5 +1,13 @@
-import { GoalIcon, LightbulbIcon, Target, TargetIcon } from "lucide-react";
+import {
+  FacebookIcon,
+  GoalIcon,
+  InstagramIcon,
+  LightbulbIcon,
+  Target,
+  TargetIcon,
+} from "lucide-react";
 import Image from "next/image";
+import { FaSquareWhatsapp, FaX, FaXTwitter } from "react-icons/fa6";
 
 export default function Page() {
   return (
@@ -26,8 +34,25 @@ export default function Page() {
           </section>
 
           {/* Who We Are */}
-          <section className="flex flex-col lg:flex-row py-16 px-6 max-w-5xl mx-auto">
-            <div className="lg:w-[calc(100%/2)]">picture</div>
+          <section className="flex flex-col lg:flex-row py-16 px-6 max-w-5xl mx-auto gap-3">
+            <div className="flex flex-col justify-center items-center lg:w-[calc(100%/2)]">
+              <div className=" relative w-full h-40">
+                <Image
+                  src="/EAST-COURT-LOGO-2.png"
+                  alt="Eastcourt Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className=" relative w-[calc(100%/2)] h-20 mt-4">
+                <Image
+                  src="/EAST-COURT-LOGO-1.png"
+                  alt="Eastcourt Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
             <div className="flex flex-col gap-3 lg:w-[calc(100%/2)]">
               <h2 className="text-3xl font-semibold mb-4 ">Who We Are</h2>
               <p className="leading-relaxed">
@@ -142,12 +167,32 @@ export default function Page() {
             with trusted sellers and buyers, and experience real estate the way
             it should be — secure, simple, and effective.
           </p>
-          <a
-            href="/contact"
-            className=" w-fit bg-white text-gray-900 font-semibold px-6 py-3 rounded-full shadow hover:bg-gray-100 transition"
-          >
-            Contact Us
-          </a>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a
+              href="/contact"
+              className=" w-fit bg-white text-gray-900 font-semibold px-6 py-3 rounded-full shadow hover:bg-gray-100 transition"
+            >
+              <FacebookIcon />{" "}
+            </a>
+            <a
+              href="/contact"
+              className=" w-fit bg-white text-gray-900 font-semibold px-6 py-3 rounded-full shadow hover:bg-gray-100 transition"
+            >
+              <FaSquareWhatsapp size={25} />
+            </a>
+            <a
+              href="/contact"
+              className=" w-fit bg-white text-gray-900 font-semibold px-6 py-3 rounded-full shadow hover:bg-gray-100 transition"
+            >
+              <InstagramIcon />
+            </a>
+            <a
+              href="/contact"
+              className=" w-fit bg-white text-gray-900 font-semibold px-6 py-3 rounded-full shadow hover:bg-gray-100 transition"
+            >
+              <FaXTwitter size={25} />
+            </a>
+          </div>
         </div>
       </section>
     </div>

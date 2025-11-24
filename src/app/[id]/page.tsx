@@ -255,40 +255,42 @@ export default async function PropertyDetailsPage({
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-6">
-              {" "}
-              <div>
-                <div className="pt-6">
-                  <h3 className="text-lg font-semibold mb-4">
-                    Location & Nearby
-                  </h3>
-                  <div className="aspect-video bg-muted rounded-lg mb-6 overflow-hidden">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      loading="lazy"
-                      allowFullScreen
-                      referrerPolicy="no-referrer-when-downgrade"
-                      src={`https://www.google.com/maps?q=${property.location}&output=embed`}
-                    ></iframe>
-                  </div>
-                  <h4 className="font-medium mb-3">Address</h4>
-                  <div className="flex">
-                    <div className="flex items-center">
-                      <MapPin className="h-5 w-5 mr-3 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">
-                          {property.address}
-                        </p>
+          <div className="lg:w-[calc(40%)]">
+            <Card>
+              <CardContent className="p-6">
+                {" "}
+                <div>
+                  <div className="pt-6">
+                    <h3 className="text-lg font-semibold mb-4">
+                      Location & Nearby
+                    </h3>
+                    <div className="aspect-video bg-muted rounded-lg mb-6 overflow-hidden">
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        allowFullScreen
+                        referrerPolicy="no-referrer-when-downgrade"
+                        src={`https://www.google.com/maps?q=${property.location}&output=embed`}
+                      ></iframe>
+                    </div>
+                    <h4 className="font-medium mb-3">Address</h4>
+                    <div className="flex">
+                      <div className="flex items-center">
+                        <MapPin className="h-5 w-5 mr-3 text-muted-foreground" />
+                        <div>
+                          <p className="text-sm text-muted-foreground">
+                            {property.address}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

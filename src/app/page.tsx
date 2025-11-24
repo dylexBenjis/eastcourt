@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { RecentListings } from "./recent-listings";
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "EASTCOURT",
   description:
-    "Welcome to Eastcourt, where you can submit and find a property suited for you.",
+    "This is the Eastcourt platform, where you can submit and find a property suited for you or your business.",
   icons: "EAST-COURT-LOGO-2.png",
 };
 
@@ -35,7 +36,24 @@ export default function Page() {
       <div className="my-6 h-auto w-screen justify-center items-center flex">
         <div className="flex flex-col gap-10 lg:w-[1200px] max-w-[1200px]">
           <div className="flex flex-row my-5">
-            <div className=" w-[calc(100%/2)]">picture</div>
+            <div className="flex flex-col justify-center items-center lg:w-[calc(100%/2)]">
+              <div className=" relative w-full h-40">
+                <Image
+                  src="/EAST-COURT-LOGO-2.png"
+                  alt="Eastcourt Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className=" relative w-[calc(100%/2)] h-20 mt-4">
+                <Image
+                  src="/EAST-COURT-LOGO-1.png"
+                  alt="Eastcourt Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
             <div className="flex flex-col gap-3 w-[calc(100%/2)]">
               <h1 className="text-3xl font-semibold tracking-wider">
                 Who We Are.
