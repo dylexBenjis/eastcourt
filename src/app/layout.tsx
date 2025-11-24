@@ -8,7 +8,7 @@ import NavBar from "../components/nav_bar";
 import Footer from "../components/footer";
 import Edit_listing_Provider from "../components/edit-listing-provider";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({
   children,
@@ -17,6 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta
+        name="google-site-verification"
+        content="9tUibAy0Pj7GKsbgPHllQ0AjQeFXtSESMYBkNgqRcB0"
+      />
       <body className="">
         <ThemeModeProvider>
           <ActiveTab_Provider>
