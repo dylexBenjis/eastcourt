@@ -1,11 +1,12 @@
 import { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots{
-    return{
-        rules:{
-            userAgent:'*',
-            allow:'/',
-            disallow:'/eastcourt_admin/'
-        }
-    }
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: "/eastcourt_admin/",
+    },
+    sitemap: "https://eastcourt.vercel.app/sitemap.xml",
+  };
 }
