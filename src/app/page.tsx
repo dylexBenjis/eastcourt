@@ -76,7 +76,7 @@ export default function Page() {
               </p>
               <Link
                 className="bg-orange-950 py-2 px-3 text-white rounded-md w-fit hover:bg-orange-800"
-                href="/about_us"
+                href="/about-us"
               >
                 Know More
               </Link>

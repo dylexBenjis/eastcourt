@@ -84,7 +84,7 @@ const NavBar = () => {
                         {
                           name: "About Us",
                           icon: <Mail className="mr-2 h-4 w-4" />,
-                          tab: "/about_us",
+                          tab: "/about-us",
                         },
                       ].map((item) => (
                         <Button
@@ -133,7 +133,7 @@ const NavBar = () => {
                         {
                           name: "About Us",
                           icon: <Mail className="mr-2 h-4 w-4" />,
-                          tab: "/about_us",
+                          tab: "/about-us",
                         },
                       ].map((item) => (
                         <Button
@@ -181,7 +181,7 @@ const NavBar = () => {
                   { name: "Browse Listings", tab: "/properties" },
                   // { name: "My Listings", tab: "mylistings" },
                   { name: "Post Property", tab: "/post_property" },
-                  { name: "About Us", tab: "/about_us" },
+                  { name: "About Us", tab: "/about-us" },
                 ].map((item) => (
                   <Button
                     key={item.name}
