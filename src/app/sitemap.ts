@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://eastcourt.vercel.app/",
       lastModified: new Date().toISOString(),
       changeFrequency: "yearly",
-      priority: 1,
+      priority: 0.9,
     },
     {
       url: "https://eastcourt.vercel.app/about_us",
