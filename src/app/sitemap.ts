@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: "https://eastcourt.vercel.app/about_us",
+      url: "https://eastcourt.vercel.app/about-us",
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly",
       priority: 0.8,
