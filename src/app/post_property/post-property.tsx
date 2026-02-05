@@ -133,7 +133,7 @@ const selectedRoleData = roles.find((role)=>{
     );
     const uploadedImages = await res.json() 
     console.log("Uploaded Images:", uploadedImages)
-      newImageArray.push({filename: `${image.name}${uploadedImages.url}`, imageUrls: uploadedImages.url, type: 'video'})}
+      newImageArray.push({filename: `${image.name}${uploadedImages.url}`, imageUrls: uploadedImages.secure_url, type: 'video'})}
       console.log("newImageArray", newImageArray)
     }}catch(error){console.log("Error uploading image:", error)}}
     
